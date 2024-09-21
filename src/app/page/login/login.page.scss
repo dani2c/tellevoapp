@@ -1,0 +1,19 @@
+ion-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+form {
+    width: 100%;
+    max-width: 400px; /* Establece un ancho máximo para el formulario */
+    padding: 20px; /* Agrega algo de padding */
+    box-shadow: 0 4px 8px #0000001a; /* Sombras para mejor efecto visual */
+    border-radius: 8px;
+}
+.botoniniciarsesion{
+    --border-radius: 50px; /* Define el radio del borde */
+    --background: #ffffff;
+}
+
