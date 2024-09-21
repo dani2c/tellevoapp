@@ -10,7 +10,13 @@ const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
+  },  {
+    path: 'pidiendo-auto',
+    loadChildren: () => import('./page/pidiendo-auto/pidiendo-auto.module').then( m => m.PidiendoAutoPageModule)
   },
+
+  
+
   
 ];
 

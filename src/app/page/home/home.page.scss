@@ -26,8 +26,28 @@
   text-decoration: none;
 }
 
-.foto-auto{
-  margin-top: 20px;
+.foto-auto {
+  margin-top: 75px;
   margin-left: 20px;
   margin-right: 20px;
+  border-radius: 15px; /* Ajusta el valor según tu preferencia */
+  overflow: hidden; /* Esto asegura que el contenido no se desborde */
 }
+
+p{
+  text-align: center;
+  font-family: Georgia, serif;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%; 
+  text-align: center;
+}
+
+.additional-text {
+  margin-top: 5px;
+}
+
