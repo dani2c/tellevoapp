@@ -19,6 +19,14 @@ const routes: Routes = [
     path: 'prueba',
     loadChildren: () => import('./page/prueba/prueba.module').then( m => m.PruebaPageModule)
   },
+  {
+    path: 'claveolvidada',
+    loadChildren: () => import('./page/claveolvidada/claveolvidada.module').then( m => m.ClaveolvidadaPageModule)
+  },
+  {
+    path: 'registro',
+    loadChildren: () => import('./page/registro/registro.module').then( m => m.RegistroPageModule)
+  },
   
 ];
 

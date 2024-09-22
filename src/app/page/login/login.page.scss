@@ -5,15 +5,37 @@ ion-content {
     height: 100%;
   }
   
-form {
+.formulario {
     width: 100%;
-    max-width: 400px; /* Establece un ancho máximo para el formulario */
-    padding: 20px; /* Agrega algo de padding */
-    box-shadow: 0 4px 8px #0000001a; /* Sombras para mejor efecto visual */
+    max-width: 400px; 
+    padding: 20px;
+    box-shadow: 0 4px 8px #0000001a; 
     border-radius: 8px;
 }
 .botoniniciarsesion{
-    --border-radius: 50px; /* Define el radio del borde */
-    --background: #ffffff;
+    border-radius: 8px; 
 }
 
+.div-clave{
+    font-size: 12px;
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.clave-olvidada{
+    text-align: left;
+    cursor: pointer;
+    text-decoration:none;
+}
+
+.div-registro{
+    font-size: 12px;
+    text-align: right;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.registro{
+    text-align: right;
+    cursor: pointer;
+    text-decoration:none;
+}
