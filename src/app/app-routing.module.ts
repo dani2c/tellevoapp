@@ -14,7 +14,8 @@ const routes: Routes = [
   {
     path: 'pidiendo-auto',
     loadChildren: () => import('./page/pidiendo-auto/pidiendo-auto.module').then( m => m.PidiendoAutoPageModule)
-  },  {
+  },
+  {
     path: 'programar-viaje-con-auto',
     loadChildren: () => import('./page/programar-viaje-con-auto/programar-viaje-con-auto.module').then( m => m.ProgramarViajeConAutoPageModule)
   },

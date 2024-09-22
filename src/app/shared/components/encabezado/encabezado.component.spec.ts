@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { EncabezadoComponent } from './encabezado.component';
 
+
 describe('EncabezadoComponent', () => {
   let component: EncabezadoComponent;
   let fixture: ComponentFixture<EncabezadoComponent>;
