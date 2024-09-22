@@ -1,0 +1,11 @@
+<app-encabezado></app-encabezado>
+<ion-content class="fondo">
+    <div class="foto-auto">
+    <ion-button fill="clear">
+        <img class="borde" src="assets/images/canceled.jpg" alt="Cancelar" />
+    </ion-button>
+    </div>
+    <p color="primary">¿Desea cancelar su viaje?</p>
+    <ion-button (click)="goToViajeCancelado()" color="danger" class="boton">CANCELAR VIAJE</ion-button>
+    <ion-button (click)="goToHomeSimulado()" class="footer" >Volver atrás</ion-button>    
+</ion-content>

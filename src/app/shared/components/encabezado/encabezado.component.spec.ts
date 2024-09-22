@@ -3,9 +3,11 @@ import { IonicModule } from '@ionic/angular';
 
 import { EncabezadoComponent } from './encabezado.component';
 
+
 describe('EncabezadoComponent', () => {
   let component: EncabezadoComponent;
   let fixture: ComponentFixture<EncabezadoComponent>;
+  
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -21,4 +23,5 @@ describe('EncabezadoComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

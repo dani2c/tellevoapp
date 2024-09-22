@@ -1,4 +1,11 @@
 <app-encabezado></app-encabezado>
-<ion-content>
-  
+<ion-content class="fondo">
+    <div class="foto-auto">
+    <ion-button fill="clear" (click)="goToPidiendoAuto()">
+        <img class="borde" src="assets/images/auto-placeholder.png" alt="Imagen del botón" />
+    </ion-button>
+    </div>
+    <p style="color: black;">Programar viaje</p>
+    <ion-button (click)="goToContactanos()" style="color:secondary;" class="footer">Contáctanos</ion-button>    
+
 </ion-content>
