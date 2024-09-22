@@ -72,7 +72,15 @@ const routes: Routes = [
   {
     path: 'registro',
     loadChildren: () => import('./page/registro/registro.module').then( m => m.RegistroPageModule)
+  },  {
+    path: 'registrado',
+    loadChildren: () => import('./page/registrado/registrado.module').then( m => m.RegistradoPageModule)
   },
+  {
+    path: 'recuperar',
+    loadChildren: () => import('./page/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
+  },
+
   
 ];
 

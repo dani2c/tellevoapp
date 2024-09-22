@@ -1,18 +1,27 @@
-<app-encabezado></app-encabezado>
+<app-encabezado2></app-encabezado2>
 
-<ion-content class="ion-padding">
-  <ion-text color="primary" class="ion-text-center">
-    <h1>Inicio de sesión</h1>
-    <ion-list>
+<ion-content class="fondo">
+  <ion-text color="secondary" class="ion-text-center">
+    <ion-list class="lista">
+      <h1>Inicio de sesión</h1>
       <form #miForm="ngForm" (ngSubmit)="enviar()">
         <ion-item>
           <ion-input type="text" required label="Correo" labelPlacement="floating" placeholder="correo" name='correo' [(ngModel)]="usr.correo" ></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input type="password" required label="Contraseña" labelPlacement="floating" placeholder="*******" name="clave" [(ngModel)]="usr.clave"></ion-input>
+          <div>
+            <ion-input type="password" required label="Contraseña" labelPlacement="floating" placeholder="*******" name="clave" [(ngModel)]="usr.clave"></ion-input>
+          </div>
+          <div>
+            <ion-text (click)="goToRecuperar()">¿Olvidó su contraseña?</ion-text>
+          </div>
         </ion-item>
-        <ion-button (click)="enviar()" type="submit" expand="block" fill="solid" color="primary" [disabled]="miForm.invalid">
+        
+        <ion-button (click)="enviar()" type="submit" expand="block" fill="solid" color="secondary" [disabled]="miForm.invalid">
           Iniciar Sesión
+        </ion-button>
+        <ion-button (click)="goToRegistro()"expand="block" fill="solid" color="primary">
+          Registrarse
         </ion-button>
         <ion-text color="primary">
           <h4>{{mensaje}}</h4>

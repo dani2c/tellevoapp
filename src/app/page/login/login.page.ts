@@ -56,8 +56,10 @@ export class LoginPage implements OnInit {
     }
   } 
   
-  
-  /**goToHome(){
-    this.navCtrl.navigateForward('/home')
-  }**/
+  goToRegistro(){
+    this.navCtrl.navigateForward('/registro')
+  }
+  goToRecuperar(){
+    this.navCtrl.navigateForward('/recuperar')
+  }
 }

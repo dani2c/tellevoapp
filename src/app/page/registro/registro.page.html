@@ -1,3 +1,27 @@
-<app-encabezado></app-encabezado>
+<app-encabezado2></app-encabezado2>
 
-<h1>registro</h1>
+<ion-content class="fondo">
+    <ion-text color="secondary" class="ion-text-center">
+      <ion-list class="lista">
+        <h1>Registro</h1>
+        <form>
+          <ion-item>
+            <ion-input type="text" required label="Nombre" labelPlacement="floating" placeholder="Nombre" name='nombre'></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input type="text" required label="Apellido" labelPlacement="floating" placeholder="Apellido" name="apellido"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input type="password" required label="Clave" labelPlacement="floating" placeholder="*******" name="clave"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input type="email" required label="Correo" labelPlacement="floating" placeholder="example@gmail.com" name="correo"></ion-input>
+          </ion-item>
+          <ion-button (click)="goToRegistrado()"expand="block" fill="solid" color="secondary">
+            Registrarse
+          </ion-button>
+        </form>
+      </ion-list>
+    </ion-text>
+    <ion-button (click)="goToLogin()"style="color:secondary;" class="footer">Volver atrás</ion-button>
+  </ion-content>
