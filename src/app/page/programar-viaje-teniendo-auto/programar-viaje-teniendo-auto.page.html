@@ -1,49 +1,67 @@
 <app-encabezado></app-encabezado>
 <ion-content class="fondo">
-    <form>
-      <ion-toolbar>
-        <ion-title>¿Dónde irá?</ion-title>
-      </ion-toolbar>
-      <ion-item>
-        <ion-label>Ciudad</ion-label>
-        <ion-select placeholder="Selecciona una ciudad" required>
-          <ion-select-option value="arauco">Arauco</ion-select-option>
-          <ion-select-option value="colcura">Colcura</ion-select-option>
-          <ion-select-option value="lota">Lota</ion-select-option>
-          <ion-select-option value="coronel">Coronel</ion-select-option>
-          <ion-select-option value="sanpedro">San Pedro</ion-select-option>
-          <ion-select-option value="concepcion">Concepción</ion-select-option>
-          <ion-select-option value="concepcion">Talcahuano</ion-select-option>
-          <ion-select-option value="concepcion">Penco</ion-select-option>
-          <ion-select-option value="concepcion">Lirquén</ion-select-option>
-          <ion-select-option value="concepcion">Tomé</ion-select-option>
-        </ion-select>
-      </ion-item>
-  
-      <ion-item>
-        <ion-label >Hora</ion-label>
-        <ion-select placeholder="Selecciona una hora" required>
-          <ion-select-option value="5-6">5:00 - 6:00</ion-select-option>
-          <ion-select-option value="6-7">6:00 - 7:00</ion-select-option>
-          <ion-select-option value="7-8">7:00 - 8:00</ion-select-option>
-          <ion-select-option value="8-9">8:00 - 9:00</ion-select-option>
-          <ion-select-option value="9-10">9:00 - 10:00</ion-select-option>
-          <ion-select-option value="10-11">10:00 - 11:00</ion-select-option>
-          <ion-select-option value="11-12">11:00 - 12:00</ion-select-option>
-          <ion-select-option value="12-13">12:00 - 13:00</ion-select-option>
-          <ion-select-option value="13-14">13:00 - 14:00</ion-select-option>
-          <ion-select-option value="14-15">14:00 - 15:00</ion-select-option>
-          <ion-select-option value="15-16">15:00 - 16:00</ion-select-option>
-          <ion-select-option value="16-17">16:00 - 17:00</ion-select-option>
-          <ion-select-option value="17-18">17:00 - 18:00</ion-select-option>
-          <ion-select-option value="18-19">18:00 - 19:00</ion-select-option>
-          <ion-select-option value="19-20">19:00 - 20:00</ion-select-option>
-          <ion-select-option value="20-21">20:00 - 21:00</ion-select-option>
-          <ion-select-option value="21-22">21:00 - 22:00</ion-select-option>
-        </ion-select>
-      </ion-item>
-  
-      <ion-button class="botoniniciarsesion" expand="full" type="submit" (click)="goToLeNotificaremos()">Confirmar su trayectoria</ion-button>
-    </form>
+  <form>
+    <ion-toolbar class="toolbar">
+      <ion-title >Elija su destino</ion-title>
+    </ion-toolbar>
+    <ion-item >
+      <ion-label class="label" >Ciudad Origen</ion-label>
+      <ion-select class="label" placeholder="Selecciona una ciudad" required>
+        <ion-select-option value="arauco">Arauco</ion-select-option>
+        <ion-select-option value="colcura">Colcura</ion-select-option>
+        <ion-select-option value="lota">Lota</ion-select-option>
+        <ion-select-option value="coronel">Coronel</ion-select-option>
+        <ion-select-option value="sanpedro">San Pedro</ion-select-option>
+        <ion-select-option value="concepcion">Concepción</ion-select-option>
+        <ion-select-option value="concepcion">Talcahuano</ion-select-option>
+        <ion-select-option value="concepcion">Penco</ion-select-option>
+        <ion-select-option value="concepcion">Lirquén</ion-select-option>
+        <ion-select-option value="concepcion">Tomé</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item >
+      <ion-label class="label" >Ciudad Destino</ion-label>
+      <ion-select class="label" placeholder="Selecciona una ciudad" required>
+        <ion-select-option value="arauco">Arauco</ion-select-option>
+        <ion-select-option value="colcura">Colcura</ion-select-option>
+        <ion-select-option value="lota">Lota</ion-select-option>
+        <ion-select-option value="coronel">Coronel</ion-select-option>
+        <ion-select-option value="sanpedro">San Pedro</ion-select-option>
+        <ion-select-option value="concepcion">Concepción</ion-select-option>
+        <ion-select-option value="concepcion">Talcahuano</ion-select-option>
+        <ion-select-option value="concepcion">Penco</ion-select-option>
+        <ion-select-option value="concepcion">Lirquén</ion-select-option>
+        <ion-select-option value="concepcion">Tomé</ion-select-option>
+      </ion-select>
+    </ion-item> 
+    
+
+    <ion-item>
+      <ion-label class="label">Hora</ion-label>
+      <ion-select class="label" placeholder="Selecciona una hora" required>
+        <ion-select-option value="5-6">5:00 - 6:00</ion-select-option>
+        <ion-select-option value="6-7">6:00 - 7:00</ion-select-option>
+        <ion-select-option value="7-8">7:00 - 8:00</ion-select-option>
+        <ion-select-option value="8-9">8:00 - 9:00</ion-select-option>
+        <ion-select-option value="9-10">9:00 - 10:00</ion-select-option>
+        <ion-select-option value="10-11">10:00 - 11:00</ion-select-option>
+        <ion-select-option value="11-12">11:00 - 12:00</ion-select-option>
+        <ion-select-option value="12-13">12:00 - 13:00</ion-select-option>
+        <ion-select-option value="13-14">13:00 - 14:00</ion-select-option>
+        <ion-select-option value="14-15">14:00 - 15:00</ion-select-option>
+        <ion-select-option value="15-16">15:00 - 16:00</ion-select-option>
+        <ion-select-option value="16-17">16:00 - 17:00</ion-select-option>
+        <ion-select-option value="17-18">17:00 - 18:00</ion-select-option>
+        <ion-select-option value="18-19">18:00 - 19:00</ion-select-option>
+        <ion-select-option value="19-20">19:00 - 20:00</ion-select-option>
+        <ion-select-option value="20-21">20:00 - 21:00</ion-select-option>
+        <ion-select-option value="21-22">21:00 - 22:00</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-button class="botoniniciarsesion" expand="full" type="submit" (click)="goToLeNotificaremos()" color="secondary">Confirmar viaje</ion-button>
+    <ion-button (click)="goToPidiendoAuto()" style="color:secondary;" class="footer">Volver atrás</ion-button>  
+  </form>
 
 </ion-content>

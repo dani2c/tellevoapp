@@ -12,4 +12,7 @@ export class SeleccionarViajesDisponiblesPage{
   goToRealizado(){
     this.navCtrl.navigateForward('/realizado')
   }
+  goToProgramarViajeConAuto(){
+    this.navCtrl.navigateForward('/programar-viaje-con-auto')
+  }
 }

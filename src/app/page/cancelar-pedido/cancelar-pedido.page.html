@@ -5,6 +5,7 @@
         <img class="borde" src="assets/images/canceled.jpg" alt="Cancelar" />
     </ion-button>
     </div>
-    <p (click)="goToViajeCancelado()" style="color: black;">CANCELAR VIAJE</p>
-    <p (click)="goToHomeSimulado()" style="color: black;" >VOLVER ATRÁS</p>    
+    <p color="primary">¿Desea cancelar su viaje?</p>
+    <ion-button (click)="goToViajeCancelado()" color="danger" class="boton">CANCELAR VIAJE</ion-button>
+    <ion-button (click)="goToHomeSimulado()" class="footer" >Volver atrás</ion-button>    
 </ion-content>

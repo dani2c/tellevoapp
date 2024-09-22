@@ -15,4 +15,7 @@ export class PidiendoAutoPage {
   goToProgramarViajeTeniendoAuto(){
     this.navCtrl.navigateForward('/programar-viaje-teniendo-auto')
   }
+  goToHome(){
+    this.navCtrl.navigateForward('/home')
+  }
 }

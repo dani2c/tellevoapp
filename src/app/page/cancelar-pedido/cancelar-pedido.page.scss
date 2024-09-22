@@ -1,5 +1,5 @@
 .foto-auto {
-    margin-top: 75px;
+    margin-top: 180px;
     margin-left: 20px;
     margin-right: 20px;
     border-radius: 15px;
@@ -9,6 +9,7 @@
   p{
     text-align: center;
     font-family: Georgia, serif;
+    color: black;
   }
   
   .footer {
@@ -21,3 +22,10 @@
   .borde{
     border-radius: 15px;
   }  
+  .boton{
+    padding-top: 230px;
+    bottom: 0;
+    left: 0;
+    width: 100%; 
+    text-align: center;
+  }

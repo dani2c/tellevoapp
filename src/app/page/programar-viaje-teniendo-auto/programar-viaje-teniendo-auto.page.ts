@@ -12,4 +12,7 @@ export class ProgramarViajeTeniendoAutoPage{
   goToLeNotificaremos(){
     this.navCtrl.navigateForward('/le-notificaremos')
   }
+  goToPidiendoAuto(){
+    this.navCtrl.navigateForward('/pidiendo-auto')
+  }
 }

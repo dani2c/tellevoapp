@@ -1,12 +1,12 @@
 <app-encabezado></app-encabezado>
 <ion-content class="fondo">
     <form>
-      <ion-toolbar>
-        <ion-title>Elija su destino</ion-title>
+      <ion-toolbar class="toolbar">
+        <ion-title >Elija su destino</ion-title>
       </ion-toolbar>
-      <ion-item>
-        <ion-label>Ciudad</ion-label>
-        <ion-select placeholder="Selecciona una ciudad" required>
+      <ion-item >
+        <ion-label class="label" >Ciudad Origen</ion-label>
+        <ion-select class="label" placeholder="Selecciona una ciudad" required>
           <ion-select-option value="arauco">Arauco</ion-select-option>
           <ion-select-option value="colcura">Colcura</ion-select-option>
           <ion-select-option value="lota">Lota</ion-select-option>
@@ -19,10 +19,27 @@
           <ion-select-option value="concepcion">Tomé</ion-select-option>
         </ion-select>
       </ion-item>
+
+      <ion-item >
+        <ion-label class="label" >Ciudad Destino</ion-label>
+        <ion-select class="label" placeholder="Selecciona una ciudad" required>
+          <ion-select-option value="arauco">Arauco</ion-select-option>
+          <ion-select-option value="colcura">Colcura</ion-select-option>
+          <ion-select-option value="lota">Lota</ion-select-option>
+          <ion-select-option value="coronel">Coronel</ion-select-option>
+          <ion-select-option value="sanpedro">San Pedro</ion-select-option>
+          <ion-select-option value="concepcion">Concepción</ion-select-option>
+          <ion-select-option value="concepcion">Talcahuano</ion-select-option>
+          <ion-select-option value="concepcion">Penco</ion-select-option>
+          <ion-select-option value="concepcion">Lirquén</ion-select-option>
+          <ion-select-option value="concepcion">Tomé</ion-select-option>
+        </ion-select>
+      </ion-item> 
+      
   
       <ion-item>
-        <ion-label >Hora</ion-label>
-        <ion-select placeholder="Selecciona una hora" required>
+        <ion-label class="label">Hora</ion-label>
+        <ion-select class="label" placeholder="Selecciona una hora" required>
           <ion-select-option value="5-6">5:00 - 6:00</ion-select-option>
           <ion-select-option value="6-7">6:00 - 7:00</ion-select-option>
           <ion-select-option value="7-8">7:00 - 8:00</ion-select-option>
@@ -43,7 +60,8 @@
         </ion-select>
       </ion-item>
   
-      <ion-button class="botoniniciarsesion" expand="full" type="submit" (click)="goToSeleccionarViajesDisponibles()">Consultar viajes disponibles</ion-button>
+      <ion-button class="botoniniciarsesion" expand="full" type="submit" (click)="goToSeleccionarViajesDisponibles()" color="secondary">Consultar viajes disponibles</ion-button>
+      <ion-button (click)="goToPidiendoAuto()" style="color:secondary;" class="footer">Volver atrás</ion-button>  
     </form>
 
 </ion-content>
