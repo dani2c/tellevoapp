@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { usuarioLog } from 'src/app/interfaces/usuario-log';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -17,30 +18,15 @@ export class LoginPage implements OnInit {
     clave:''
   }
 
-  constructor(private alertctrl:AlertController, private router:Router) { }
+  constructor(private alertctrl:AlertController, private router:Router, private navCtrl: NavController) { }
 
   ngOnInit() {
   }
-  enviar(){
-
-    console.log(this.usr);
-    if(this.usr.correo=="hola@gmail.com" && this.usr.clave=="hola123"){
-      this.mensaje="Ok"
-      this.usr.correo='';
-      this.usr.clave=''
-      this.router.navigate(['/home'])
-    }
-    else{
-      this.mensaje="Acceso denegado"
-      this.alerta()
-    }
-  } 
   async alerta(){
     console.log("Alerta desde controller");
     const alert = await this.alertctrl.create({
       header: 'Acceso denegado',
-      subHeader: 'usuario y/o password incorrecto',
-      message: 'eso!!',
+      message: 'usuario y/o password incorrecto',
       buttons: [{
         id:'aceptar del alert controller',
         text:'Aceptar',
@@ -56,7 +42,22 @@ export class LoginPage implements OnInit {
 
     await alert.present();
   }
-  
-  
+  enviar(){
 
+    console.log(this.usr);
+    if(this.usr.correo=="hola@gmail.com" && this.usr.clave=="hola123"){
+      this.mensaje="Ok"
+      this.usr.correo='';
+      this.usr.clave=''
+      this.router.navigate(['/home'])
+    }
+    else{
+      this.mensaje="Acceso denegado"
+    }
+  } 
+  
+  
+  /**goToHome(){
+    this.navCtrl.navigateForward('/home')
+  }**/
 }

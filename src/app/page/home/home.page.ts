@@ -15,4 +15,6 @@ export class HomePage {
   goToContactanos(){
     this.navCtrl.navigateForward('/contactanos')
   }
+
+  
 }
