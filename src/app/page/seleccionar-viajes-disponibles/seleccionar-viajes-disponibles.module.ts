@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { SeleccionarViajesDisponiblesPageRoutingModule } from './seleccionar-viajes-disponibles-routing.module';
 
 import { SeleccionarViajesDisponiblesPage } from './seleccionar-viajes-disponibles.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SeleccionarViajesDisponiblesPageRoutingModule
+    SeleccionarViajesDisponiblesPageRoutingModule,
+    SharedModule
   ],
   declarations: [SeleccionarViajesDisponiblesPage]
 })

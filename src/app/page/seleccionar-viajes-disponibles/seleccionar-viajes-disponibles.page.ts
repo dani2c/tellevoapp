@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-seleccionar-viajes-disponibles',
   templateUrl: './seleccionar-viajes-disponibles.page.html',
   styleUrls: ['./seleccionar-viajes-disponibles.page.scss'],
 })
-export class SeleccionarViajesDisponiblesPage implements OnInit {
+export class SeleccionarViajesDisponiblesPage{
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private navCtrl: NavController) {}
+  goToRealizado(){
+    this.navCtrl.navigateForward('/realizado')
   }
-
 }

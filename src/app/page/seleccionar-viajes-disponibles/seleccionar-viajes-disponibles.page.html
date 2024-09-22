@@ -1,13 +1,38 @@
-<ion-header [translucent]="true">
+<app-encabezado></app-encabezado>
+<ion-content class="fondo">
   <ion-toolbar>
-    <ion-title>seleccionar-viajes-disponibles</ion-title>
+    <ion-title color="secondary">Seleccione una persona</ion-title>
   </ion-toolbar>
-</ion-header>
+  <div class="foto-auto">
+    <ion-button fill="clear" (click)="goToRealizado()" >
+        <img src="assets/images/persona-uno.jpg" alt="Usuario" />
+    </ion-button>
+    </div>
+    <p style="color: black;">Ian Salazar Carrillo</p>
+    <p style="color: black;">Disponible!</p>
+    <div class="foto-auto">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">seleccionar-viajes-disponibles</ion-title>
-    </ion-toolbar>
-  </ion-header>
+      <ion-button fill="clear" (click)="goToRealizado()">
+          <img src="assets/images/persona-dos.png" alt="Usuario" />
+      </ion-button>
+      </div>
+      <p style="color: black;">Nicole Quiroga Pereira</p>
+      <p style="color: black;">Disponible!</p>
+      <div class="foto-auto">
+
+        <ion-button fill="clear" (click)="goToRealizado()">
+            <img src="assets/images/persona-tres.jpg" alt="Usuario" />
+        </ion-button>
+        </div>
+        <p style="color: black;">Katherine Novoa Toledo</p>
+        <p style="color: black;">Disponible!</p>
+        <div class="foto-auto">
+
+          <ion-button fill="clear" (click)="goToRealizado()">
+              <img src="assets/images/persona-cuatro.jpg" alt="Usuario" />
+          </ion-button>
+          </div>
+          <p style="color: black;">Eduardo Del Pino Gajardo </p>
+          <p style="color: black;">Disponible!</p>    
+
 </ion-content>

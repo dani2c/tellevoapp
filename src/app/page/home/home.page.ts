@@ -12,4 +12,7 @@ export class HomePage {
   goToPidiendoAuto(){
     this.navCtrl.navigateForward('/pidiendo-auto')
   }
+  goToContactanos(){
+    this.navCtrl.navigateForward('/contactanos')
+  }
 }
