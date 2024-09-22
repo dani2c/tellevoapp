@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-pidiendo-auto',
   templateUrl: './pidiendo-auto.page.html',
   styleUrls: ['./pidiendo-auto.page.scss'],
 })
-export class PidiendoAutoPage implements OnInit {
+export class PidiendoAutoPage {
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(private navCtrl: NavController) {}
+  goToProgamarViajeConAuto(){
+    this.navCtrl.navigateForward('/programar-viaje-con-auto')
   }
-
 }
