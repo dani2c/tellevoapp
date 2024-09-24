@@ -1,3 +1,22 @@
-<app-encabezado></app-encabezado>
+<app-encabezado2></app-encabezado2>
 
-<h1>clave olvidada</h1>
+<ion-content class="fondo">
+    <ion-text class="ion-text-center">
+      <ion-list class="lista">
+        <h1>Nueva contraseña</h1>
+        <form>
+          <ion-text>Ingrese su nueva contraseña, porfavor.</ion-text>
+          <ion-item>
+            <ion-input type="password" required label="Contraseña" labelPlacement="floating" placeholder="******" name='contraseña'></ion-input>
+          </ion-item> 
+          <ion-item>
+            <ion-input type="password" required label="Confirmar contraseña" labelPlacement="floating" placeholder="******" name='contraseña'></ion-input>
+          </ion-item>          
+          <ion-button (click)="goToClavecambiada()"class="botonacep"type="submit" expand="block" fill="solid" color="secondary">
+            Aceptar
+          </ion-button>
+        </form>
+      </ion-list>
+      <ion-button (click)="goToClaveolvidada()"  class="footer">Volver</ion-button> 
+    </ion-text>
+  </ion-content>

@@ -1,9 +1,47 @@
-<app-encabezado></app-encabezado>
-<ion-content class="fondo">
+<!--Este es el menú lateral, con su texto y todo-->
+<ion-menu side="start" menuId="first" contentId="main-content">
+    <ion-header>
+        <ion-toolbar color="primary">
+            <ion-title>TeLlevoApp</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+        <ion-list>
+            <ion-item>Perfil</ion-item>
+            <ion-item>Historial</ion-item>
+            <ion-item (click)="goToLogin()">Cerrar sesión</ion-item>
+        </ion-list>
+    </ion-content>
+</ion-menu>
+
+
+<ion-content id="main-content" class="fondo">
+    <!--<app-encabezado></app-encabezado>-->
+    <!-- Encabezado-->
+    <ion-header>
+        <ion-toolbar color="primary">
+          <ion-buttons slot="start">
+            <!-- Botón que hace la magia (abre el menú) -->
+            <ion-menu-button autoHide="false"></ion-menu-button>
+          </ion-buttons>
+            <!--<ion-title class="titulo">Inicio</ion-title>-->
+            <ion-img slot="end" src="assets/images/profile.png" class="ion-padding" style="width: 80px; height: 80px; border-radius: 50%;"></ion-img>
+            <ion-img src="assets/images/logo.png" class="logo" style="width: 120px; height: 60px; margin: 0 auto; border-radius: 50%;"></ion-img>
+        </ion-toolbar>
+      </ion-header>
+
+<!--PD: Mati, si lees esto, tuve que hacer este encabezado independiente del resto para que funcionara,
+al intentar mezclarlo con nuestro encabezado no dejaba, asi que tuve que hacerlo independiente y traer
+algunas cosas como las fotos aparte a este encabezado, más adelante podríamos ver como llevar esto al
+shared, por cierto, lo dejaré sólo en el home, habría que moverlo a las otras pestanias que tengan 
+el menu con las 3 barritas, eso, espero que te guste.-->
+
+    <!--Contenido-->
     <div class="foto-auto">
-    <ion-button fill="clear" (click)="goToPidiendoAuto()">
-        <img class="borde" src="assets/images/auto-placeholder.png" alt="Imagen del botón" />
-    </ion-button>
+        <ion-button fill="clear" (click)="goToPidiendoAuto()">
+            <img class="borde" src="assets/images/auto-placeholder.png" alt="Imagen del botón" />
+        </ion-button>
     </div>
     <p style="color: black;">Programar viaje</p>
     <ion-button (click)="goToContactanos()" style="color:secondary;" class="footer">Contáctanos</ion-button>    

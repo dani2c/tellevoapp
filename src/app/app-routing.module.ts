@@ -80,6 +80,14 @@ const routes: Routes = [
     path: 'recuperar',
     loadChildren: () => import('./page/recuperar/recuperar.module').then( m => m.RecuperarPageModule)
   },
+  {
+    path: 'codigoclave',
+    loadChildren: () => import('./page/codigoclave/codigoclave.module').then( m => m.CodigoclavePageModule)
+  },
+  {
+    path: 'clavecambiada',
+    loadChildren: () => import('./page/clavecambiada/clavecambiada.module').then( m => m.ClavecambiadaPageModule)
+  },
 
   
 ];

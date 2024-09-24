@@ -13,6 +13,13 @@ export class RecuperarPage {
     private alertController: AlertController,
     private navCtrl: NavController) { }
 
+  goToRegistro(){
+      this.navCtrl.navigateForward('/registro')
+  }
+
+  goToCodigoclave(){
+    this.navCtrl.navigateForward('/codigoclave')
+  }
     /**async confirmarSolicitud(conductor: string) {
       const confirmAlert = await this.alertController.create({
         header: 'Confirmar',

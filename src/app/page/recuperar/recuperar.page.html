@@ -9,16 +9,17 @@
         <ion-item>
           <ion-input type="text" required label="Correo" labelPlacement="floating" placeholder="correo" name='correo'></ion-input>
         </ion-item> 
-        <ion-item>
+        <!--<ion-item>
           <ion-input type="text" required label="Codigo" labelPlacement="floating" placeholder="Ingrese codigo" name='codigo'></ion-input>
-        </ion-item>          
-        <ion-button type="submit" expand="block" fill="solid" color="secondary">
+        </ion-item>-->          
+        <ion-button (click)="goToCodigoclave()" class="botonacep"type="submit" expand="block" fill="solid" color="secondary">
           Aceptar
         </ion-button>
-        <ion-button expand="block" fill="solid" color="primary">
+        <!--<ion-button expand="block" fill="solid" color="primary">
           Volver a enviar código
-        </ion-button>
+        </ion-button>-->
       </form>
     </ion-list>
+    <ion-button (click)="goToRegistro()"  class="footer">Volver</ion-button> 
   </ion-text>
 </ion-content>

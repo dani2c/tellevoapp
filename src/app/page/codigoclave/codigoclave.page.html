@@ -1,0 +1,32 @@
+<app-encabezado2></app-encabezado2>
+
+<ion-content class="fondo">
+  <ion-text class="ion-text-center">
+    <ion-list class="lista">
+      <h1>Recuperar contraseña</h1>
+      <form>
+        <ion-text>Ingrese el código que se ha enviado a su correo, porfavor.</ion-text>
+        <ion-item>
+          <ion-input type="text" required label="Codigo" labelPlacement="floating" placeholder="" name='codigo'></ion-input>
+        </ion-item> 
+        <!--<ion-item>
+          <ion-input type="text" required label="Codigo" labelPlacement="floating" placeholder="Ingrese codigo" name='codigo'></ion-input>
+        </ion-item>-->          
+        <ion-button (click)="goToClaveolvidada()"class="botonacep"type="submit" expand="block" fill="solid" color="secondary">
+          Aceptar
+        </ion-button>
+        <ion-button id="alertabotoncod"class="botoncod" expand="block" fill="solid" color="primary">
+          Volver a enviar código
+        </ion-button>
+        <ion-alert 
+          trigger="alertabotoncod"
+          header="Código reenviado"
+          subHeader=""
+          message=""
+          [buttons]="alertButtons"
+        ></ion-alert>
+      </form>
+    </ion-list>
+    <ion-button (click)="goToClaveolvidada()"  class="footer">Volver</ion-button> 
+  </ion-text>
+</ion-content>

@@ -1,15 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-
+import { AlertController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 @Component({
   selector: 'app-claveolvidada',
   templateUrl: './claveolvidada.page.html',
   styleUrls: ['./claveolvidada.page.scss'],
 })
-export class ClaveolvidadaPage implements OnInit {
+export class ClaveolvidadaPage {
 
-  constructor() { }
+  constructor(private alertController: AlertController,
+    private navCtrl: NavController) { }
 
-  ngOnInit() {
+  
+  goToClaveolvidada(){
+    this.navCtrl.navigateForward('/claveolvidada')
   }
-
+  goToClavecambiada(){
+    this.navCtrl.navigateForward('/clavecambiada')
+  }
 }
