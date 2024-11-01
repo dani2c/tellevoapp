@@ -17,12 +17,22 @@
   .boton{
     margin-left: 140px;
     margin-right: 140px;
+    font-weight: 550;
   }
   .footer {
-    padding-top: 30px;
+    position: fixed;
     bottom: 0;
     left: 0;
     width: 100%; 
     text-align: center;
-    padding-bottom: 45px;
+    padding-bottom: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-weight: 550;
   }
+  .texto-destacado{
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px; /* Puedes ajustar el tamaño de la fuente */
+    font-weight: bold; /* Puedes cambiar el grosor de la fuente */
+}

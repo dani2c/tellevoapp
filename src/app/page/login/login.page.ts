@@ -45,7 +45,7 @@ export class LoginPage implements OnInit {
   enviar(){
 
     console.log(this.usr);
-    if(this.usr.correo=="hola@gmail.com" && this.usr.clave=="hola123"){
+    if(this.usr.correo=="a" && this.usr.clave=="a"){
       this.mensaje="Ok"
       this.usr.correo='';
       this.usr.clave=''

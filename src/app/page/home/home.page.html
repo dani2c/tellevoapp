@@ -31,19 +31,13 @@
         </ion-toolbar>
       </ion-header>
 
-<!--PD: Mati, si lees esto, tuve que hacer este encabezado independiente del resto para que funcionara,
-al intentar mezclarlo con nuestro encabezado no dejaba, asi que tuve que hacerlo independiente y traer
-algunas cosas como las fotos aparte a este encabezado, más adelante podríamos ver como llevar esto al
-shared, por cierto, lo dejaré sólo en el home, habría que moverlo a las otras pestanias que tengan 
-el menu con las 3 barritas, eso, espero que te guste.-->
-
     <!--Contenido-->
     <div class="foto-auto">
         <ion-button fill="clear" (click)="goToPidiendoAuto()">
             <img class="borde" src="assets/images/auto-placeholder.png" alt="Imagen del botón" />
         </ion-button>
     </div>
-    <p style="color: white;">Programar viaje</p>
+    <p class="texto-destacado">Programar viaje</p>
     <ion-button (click)="goToContactanos()" style="color:secondary;" class="footer">Contáctanos</ion-button>    
 
 </ion-content>
