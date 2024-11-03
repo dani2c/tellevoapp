@@ -1,10 +1,11 @@
 .foto-auto {
-    margin-top: 25px;
-    margin-left: 20px;
-    margin-right: 20px;
-    border-radius: 15px;
-    overflow: hidden; 
-  }
+  margin-top: 35px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 0px; 
+  border-radius: 15px;
+  overflow: hidden; 
+}
   
   p{
     text-align: center;
@@ -14,11 +15,13 @@
   .borde{
     border-radius: 15px;
   }
-  .boton{
+  .boton {
     margin-left: 140px;
     margin-right: 140px;
-    font-weight: 550;
-  }
+    margin-top: 0px; 
+    margin-bottom: 50px;
+    justify-content: center;
+}
   .footer {
     position: fixed;
     bottom: 0;
@@ -26,13 +29,4 @@
     width: 100%; 
     text-align: center;
     padding-bottom: 0px;
-    padding-left: 15px;
-    padding-right: 15px;
-    font-weight: 550;
   }
-  .texto-destacado{
-    color: white;
-    font-family: 'Roboto', sans-serif;
-    font-size: 18px; /* Puedes ajustar el tamaño de la fuente */
-    font-weight: bold; /* Puedes cambiar el grosor de la fuente */
-}
