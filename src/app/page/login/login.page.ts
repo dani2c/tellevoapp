@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 import { usuarioLog } from 'src/app/interfaces/usuario-log';
+import { LocaldbService } from 'src/app/services/localdb.service';
 import { NavController } from '@ionic/angular';
 
 @Component({
@@ -14,15 +15,32 @@ export class LoginPage implements OnInit {
   mensaje:string=""
 
   usr:usuarioLog={
+    username:'',
     correo:'',
-    clave:''
+    clave:'',
+    nombre:'',
+    apellido:''
   }
 
-  constructor(private alertctrl:AlertController, private router:Router, private navCtrl: NavController) { }
+  constructor(private db:LocaldbService, private router:Router, private toastController:ToastController, private navCtrl: NavController) { }
 
   ngOnInit() {
   }
-  async alerta(){
+
+  async presentToast(position: 'top' | 'middle' | 'bottom') {
+    const toast = await this.toastController.create({
+      message: 'El usuario o la clave ingresada no son las correctas',
+      duration: 1500,
+      position: position,
+      color: 'danger',
+      header: 'Error',
+      cssClass: 'textoast',
+    });
+
+    await toast.present();
+  }
+
+  /**async alerta(){
     console.log("Alerta desde controller");
     const alert = await this.alertctrl.create({
       header: 'Acceso denegado',
@@ -41,10 +59,23 @@ export class LoginPage implements OnInit {
     });
 
     await alert.present();
-  }
-  enviar(){
+  }**/
+  login(){
 
-    console.log(this.usr);
+    let busqueda = this.db.obtener(this.usr.username)
+    busqueda.then(datos => {
+      if (datos !== null) {
+        //clg(datos.username)
+      if(datos.username===this.usr.username && datos.clave===this.usr.clave){
+        this.router.navigate(['/home'])
+      }
+
+      } else {
+        this.presentToast('top');
+
+      }
+    });
+    /**console.log(this.usr);
     if(this.usr.correo=="a" && this.usr.clave=="a"){
       this.mensaje="Ok"
       this.usr.correo='';
@@ -53,7 +84,7 @@ export class LoginPage implements OnInit {
     }
     else{
       this.mensaje="Acceso denegado"
-    }
+    }**/
   } 
   
   goToRegistro(){

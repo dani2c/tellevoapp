@@ -4,9 +4,9 @@
   <ion-text color="secondary" class="ion-text-center">
     <ion-list color="primary" class="lista">
       <h1>Inicio de sesión</h1>
-      <form #miForm="ngForm" (ngSubmit)="enviar()">
+      <form #miForm="ngForm" (ngSubmit)="login()">
         <ion-item>
-          <ion-input type="text" required label="Correo" labelPlacement="floating" placeholder="correo" name='correo' [(ngModel)]="usr.correo" ></ion-input>
+          <ion-input type="text" required label="Username" labelPlacement="floating" placeholder="Nombre de usuario" name='nombre de usuario' [(ngModel)]="usr.username" ></ion-input>
         </ion-item>
         <ion-item>
           <div>
@@ -17,7 +17,7 @@
           </div>
         </ion-item>
         
-        <ion-button class="botonini"(click)="enviar()" type="submit" expand="block" fill="solid" color="secondary" [disabled]="miForm.invalid">
+        <ion-button class="botonini" type="submit" expand="block" fill="solid" color="secondary" [disabled]="miForm.invalid">
           Iniciar Sesión
         </ion-button>
         <ion-button class="botonreg"(click)="goToRegistro()"expand="block" fill="solid" color="primary">

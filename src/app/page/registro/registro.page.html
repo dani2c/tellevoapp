@@ -2,26 +2,36 @@
 
 <ion-content class="fondo">
     <ion-text color="secondary" class="ion-text-center">
-      <ion-list class="lista">
-        <h1>Registro</h1>
-        <form>
+      <h1>Registro</h1>
+    </ion-text>
+        <form #registroForm="ngForm" (ngSubmit)="registro()">
           <ion-item>
-            <ion-input type="text" required label="Nombre" labelPlacement="floating" placeholder="Nombre" name='nombre'></ion-input>
+            <ion-input required labelPlacement="floating" label="Nombre de usuario" name="username" type="text" placeholder="SpanaPs" [(ngModel)]="usr.username"></ion-input>
           </ion-item>
+
           <ion-item>
-            <ion-input type="text" required label="Apellido" labelPlacement="floating" placeholder="Apellido" name="apellido"></ion-input>
+            <ion-input required labelPlacement="floating" label="Correo" name="correo" type="email" placeholder="ejemplo@duocuc.cl" [(ngModel)]="usr.correo"></ion-input>
           </ion-item>
+
           <ion-item>
-            <ion-input type="password" required label="Clave" labelPlacement="floating" placeholder="*******" name="clave"></ion-input>
+            <ion-input required labelPlacement="floating" label="Clave" name="clave" type="password" placeholder="*********" [(ngModel)]="usr.clave"></ion-input>
           </ion-item>
+
           <ion-item>
-            <ion-input type="email" required label="Correo" labelPlacement="floating" placeholder="example@gmail.com" name="correo"></ion-input>
+            <ion-input required labelPlacement="floating" label="Nombre" name="nombre" type="text" placeholder="Pablo" [(ngModel)]="usr.nombre"></ion-input>
           </ion-item>
-          <ion-button class="botonreg"(click)="goToRegistrado()"expand="block" fill="solid" color="secondary">
+
+          <ion-item>
+            <ion-input required labelPlacement="floating" label="Apellido" name="apellido" type="text" placeholder="Sepulveda" [(ngModel)]="usr.apellido"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" fill="solid" color="secondary" type="submit" [disabled]="registroForm.invalid" class="ion-padding">
             Registrarse
           </ion-button>
         </form>
-      </ion-list>
-    </ion-text>
-    <ion-button (click)="goToLogin()"style="color:secondary;" class="footer">Volver atrás</ion-button>
+    
+    <ion-button (click)="goToLogin()"style="color:secondary;" class="footer">
+      Volver atrás
+    </ion-button>
+
   </ion-content>
