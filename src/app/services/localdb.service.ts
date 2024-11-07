@@ -21,7 +21,10 @@ export class LocaldbService {
   }
 
   public async obtener(key: string) {
-    const valor = await this._storage?.get(key);
-    return valor;
+    return await this._storage?.get(key);
+  }
+
+  public async getKeys(): Promise<string[]> {
+    return await this._storage?.keys() || [];
   }
 }
