@@ -29,7 +29,7 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
 
   loadMap() {
     const mapOptions = {
-      center: { lat: -33.4489, lng: -70.6693 },
+      center: { lat: -36.826992, lng: -73.049766 },
       zoom: 13,
     };
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
