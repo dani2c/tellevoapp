@@ -12,20 +12,24 @@ import { NavController } from '@ionic/angular';
 })
 export class LoginPage implements OnInit {
 
-  mensaje:string=""
+  mensaje: string = "";
 
-  usr:usuarioLog={
-    username:'',
-    correo:'',
-    clave:'',
-    nombre:'',
-    apellido:''
-  }
+  usr: usuarioLog = {
+    username: '',
+    correo: '',
+    clave: '',
+    nombre: '',
+    apellido: ''
+  };
 
-  constructor(private db:LocaldbService, private router:Router, private toastController:ToastController, private navCtrl: NavController) { }
+  constructor(
+    private db: LocaldbService, 
+    private router: Router, 
+    private toastController: ToastController, 
+    private navCtrl: NavController
+  ) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   async presentToast(position: 'top' | 'middle' | 'bottom') {
     const toast = await this.toastController.create({
@@ -36,61 +40,30 @@ export class LoginPage implements OnInit {
       header: 'Error',
       cssClass: 'textoast',
     });
-
     await toast.present();
   }
 
-  /**async alerta(){
-    console.log("Alerta desde controller");
-    const alert = await this.alertctrl.create({
-      header: 'Acceso denegado',
-      message: 'usuario y/o password incorrecto',
-      buttons: [{
-        id:'aceptar del alert controller',
-        text:'Aceptar',
-        cssClass:'color-aceptar',
-        handler:()=>{
-          console.log(event);
-        }
-      },{
-        text:'Cancelar',
-        cssClass:'color-cancelar'
-      }],
-    });
+  async login() {
+    const busqueda = await this.db.obtener(this.usr.username);
 
-    await alert.present();
-  }**/
-  login(){
-
-    let busqueda = this.db.obtener(this.usr.username)
-    busqueda.then(datos => {
-      if (datos !== null) {
-        //clg(datos.username)
-      if(datos.username===this.usr.username && datos.clave===this.usr.clave){
-        this.router.navigate(['/home'])
-      }
-
+    if (busqueda !== null) {
+      if (busqueda.username === this.usr.username && busqueda.clave === this.usr.clave) {
+        // Guardar el username del usuario activo
+        await this.db.guardar('usuarioActivo', this.usr.username);
+        this.router.navigate(['/home']);
       } else {
         this.presentToast('top');
-
       }
-    });
-    /**console.log(this.usr);
-    if(this.usr.correo=="a" && this.usr.clave=="a"){
-      this.mensaje="Ok"
-      this.usr.correo='';
-      this.usr.clave=''
-      this.router.navigate(['/home'])
+    } else {
+      this.presentToast('top');
     }
-    else{
-      this.mensaje="Acceso denegado"
-    }**/
-  } 
-  
-  goToRegistro(){
-    this.navCtrl.navigateForward('/registro')
   }
-  goToRecuperar(){
-    this.navCtrl.navigateForward('/recuperar')
+
+  goToRegistro() {
+    this.navCtrl.navigateForward('/registro');
+  }
+
+  goToRecuperar() {
+    this.navCtrl.navigateForward('/recuperar');
   }
 }
