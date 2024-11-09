@@ -10,7 +10,7 @@ export class PidiendoAutoPage {
 
   constructor(private navCtrl: NavController) {}
   goToProgamarViajeConAuto(){
-    this.navCtrl.navigateForward('/programar-viaje-con-auto')
+    this.navCtrl.navigateForward('/seleccionar-viajes-disponibles')
   }
   goToProgramarViajeTeniendoAuto(){
     this.navCtrl.navigateForward('/programar-viaje-teniendo-auto')

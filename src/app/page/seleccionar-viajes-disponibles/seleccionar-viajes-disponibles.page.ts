@@ -50,6 +50,6 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
   }
 
   goToProgramarViajeConAuto() {
-    this.navCtrl.navigateForward('/programar-viaje-con-auto');
+    this.navCtrl.navigateForward('/pidiendo-auto');
   }
 }
