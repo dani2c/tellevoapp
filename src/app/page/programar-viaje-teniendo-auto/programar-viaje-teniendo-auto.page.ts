@@ -1,7 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
-import { LocaldbService } from 'src/app/services/localdb.service';
 import { usuarioLog } from 'src/app/interfaces/usuario-log';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 declare var google: any;
 
@@ -12,82 +12,84 @@ declare var google: any;
 })
 export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
   map: any;
-  marker: any;
   destinoSeleccionado: { lat: number, lng: number } | null = null;
-  usuario: usuarioLog | null = null;
+  usuarioActivo: usuarioLog | null = null;
+  marcadorDestino: any = null;
 
   constructor(
     private navCtrl: NavController,
-    private alertController: AlertController,
-    private db: LocaldbService
+    private firebaseService: FirebaseService
   ) {}
 
   ngAfterViewInit() {
-    this.loadMap();
+    this.cargarMapa();
     this.obtenerUsuarioActivo();
   }
 
-  loadMap() {
-    const mapOptions = {
-      center: { lat: -36.826992, lng: -73.049766 },
+  cargarMapa() {
+    const centroInicial = { lat: -36.826992, lng: -73.049766 }; // Coordenadas iniciales de Concepción, Chile
+
+    this.map = new google.maps.Map(document.getElementById('map'), {
+      center: centroInicial,
       zoom: 13,
-    };
-    this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    });
 
+    // Evento para seleccionar el destino
     this.map.addListener('click', (event: any) => {
-      this.agregarMarcador(event.latLng);
+      this.destinoSeleccionado = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+
+      // Remover marcador anterior si existe
+      if (this.marcadorDestino) {
+        this.marcadorDestino.setMap(null);
+      }
+
+      // Colocar el nuevo marcador en el destino seleccionado
+      this.marcadorDestino = new google.maps.Marker({
+        position: this.destinoSeleccionado,
+        map: this.map,
+      });
     });
-  }
-
-  agregarMarcador(position: any) {
-    if (this.marker) {
-      this.marker.setMap(null); // Eliminar marcador anterior
-    }
-
-    this.marker = new google.maps.Marker({
-      position: position,
-      map: this.map,
-    });
-
-    this.destinoSeleccionado = {
-      lat: position.lat(),
-      lng: position.lng(),
-    };
   }
 
   async obtenerUsuarioActivo() {
-    // Recuperar el username del usuario activo
-    const username = await this.db.obtener('usuarioActivo');
-    if (username) {
-      // Obtener la información completa del usuario usando el username
-      this.usuario = await this.db.obtener(username);
+    // Obtener el usuario autenticado actual desde Firebase
+    const user = await this.firebaseService.obtenerUsuarioAutenticado();
+    console.log("Usuario autenticado:", user);
+
+    if (user) {
+      this.usuarioActivo = await this.firebaseService.obtenerUsuario(user.uid).toPromise();
+      console.log("Datos del usuario activo:", this.usuarioActivo);
     }
   }
 
   async confirmarDestino() {
     if (!this.destinoSeleccionado) {
-      const alert = await this.alertController.create({
-        header: 'Error',
-        message: 'Por favor, seleccione un destino en el mapa',
-        buttons: ['OK']
-      });
-      await alert.present();
+      alert('Por favor, seleccione un destino en el mapa.');
       return;
     }
 
-    if (this.usuario) {
-      const viaje = {
-        ...this.usuario,
-        destino: this.destinoSeleccionado
-      };
+    if (!this.usuarioActivo) {
+      alert('No se pudieron obtener los datos del usuario. Intente cerrar sesión y volver a ingresar.');
+      return;
+    }
 
-      // Recuperar viajes previos y agregar el nuevo
-      const viajes = (await this.db.obtener('viajes')) || [];
-      viajes.push(viaje);
-      await this.db.guardar('viajes', viajes);
+    // Crear el objeto de viaje con los datos del chofer y destino
+    const viaje = {
+      nombre: this.usuarioActivo.nombre,
+      apellido: this.usuarioActivo.apellido,
+      destino: this.destinoSeleccionado
+    };
 
-      // Redirigir a la página "le-notificaremos"
+    // Guardar el viaje en Firebase
+    try {
+      await this.firebaseService.agregarViaje(viaje);
+      alert('¡Viaje programado con éxito!');
       this.navCtrl.navigateForward('/le-notificaremos');
+    } catch (error) {
+      console.error("Error al guardar el viaje:", error);
     }
   }
 

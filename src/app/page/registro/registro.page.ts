@@ -4,6 +4,7 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { usuarioLog } from 'src/app/interfaces/usuario-log';
 import { NavController } from '@ionic/angular';
 import { LocaldbService } from 'src/app/services/localdb.service';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-registro',
@@ -12,15 +13,13 @@ import { LocaldbService } from 'src/app/services/localdb.service';
 })
 export class RegistroPage implements OnInit{
 
-  usr:usuarioLog={
-    username:'',
-    correo:'',
-    clave:'',
-    nombre:'',
-    apellido:''
-  }
+  email: string = '';
+  password: string = '';
+  nombre: string = '';
+  apellido: string = '';
+
   constructor(private navCtrl: NavController,
-    private db: LocaldbService,
+    private firebaseService: FirebaseService,
     private toastController: ToastController,
     private alertController: AlertController,
     private router: Router
@@ -29,36 +28,29 @@ export class RegistroPage implements OnInit{
   ngOnInit() {
   }
 
-  async presentToast(position: 'top' | 'middle' | 'bottom') {
+  async registro() {
+    const userData = { nombre: this.nombre, apellido: this.apellido };
+    try {
+      await this.firebaseService.registrarUsuario(this.email, this.password, userData);
+      this.presentAlert('Registro exitoso', 'Bienvenido a TeLlevoApp');
+      this.router.navigate(['/login']);
+    } catch (error) {
+      this.presentToast('Error al registrar usuario. Inténtelo de nuevo.');
+    }
+  }
+
+  async presentToast(message: string) {
     const toast = await this.toastController.create({
-      message: 'El usuario ingresado ya existe',
+      message,
       duration: 1500,
-      position: position,
       color: 'danger',
-      header: 'Error!',
-      cssClass: 'textoast',
     });
     await toast.present();
   }
 
-  registro() {
-    let buscado = this.db.obtener(this.usr.username)
-   
-    buscado.then(datos => {
-      if (datos === null) {
-        this.db.guardar(this.usr.username, this.usr);
-        //this.router.navigate(['/login'])
-        this.presentAlert();
-      } else {
-        this.presentToast('top');
-      }
-    });
-  }
-
-  async presentAlert() {
+  async presentAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header: 'Usted se ha registrado con éxito',
-      subHeader: '',
       message: 'Bienvenido a TeLlevoApp',
       buttons: [{
         text:'Continuar',
@@ -66,9 +58,8 @@ export class RegistroPage implements OnInit{
           
           this.router.navigate(['/login']);
         }
-      }]
+      }],
     });
-
     await alert.present();
   }
 
