@@ -1,37 +1,64 @@
 <app-encabezado2></app-encabezado2>
 
 <ion-content class="fondo">
-    <ion-text color="secondary" class="ion-text-center">
-      <h1>Registro</h1>
-    </ion-text>
-        <form #registroForm="ngForm" (ngSubmit)="registro()">
-          <ion-item>
-            <ion-input required labelPlacement="floating" label="Nombre de usuario" name="username" type="text" placeholder="SpanaPs" [(ngModel)]="usr.username"></ion-input>
-          </ion-item>
+  <ion-text color="secondary" class="ion-text-center">
+    <h1>Registro</h1>
+  </ion-text>
+  <form #registroForm="ngForm" (ngSubmit)="registro()">
+    <ion-item>
+      <ion-input 
+        required 
+        labelPlacement="floating" 
+        label="Correo" 
+        name="email" 
+        type="email" 
+        placeholder="ejemplo@duocuc.cl" 
+        [(ngModel)]="email">
+      </ion-input>
+    </ion-item>
 
-          <ion-item>
-            <ion-input required labelPlacement="floating" label="Correo" name="correo" type="email" placeholder="ejemplo@duocuc.cl" [(ngModel)]="usr.correo"></ion-input>
-          </ion-item>
+    <ion-item>
+      <ion-input 
+        required 
+        labelPlacement="floating" 
+        label="Clave" 
+        name="password" 
+        type="password" 
+        placeholder="*********" 
+        [(ngModel)]="password">
+      </ion-input>
+    </ion-item>
 
-          <ion-item>
-            <ion-input required labelPlacement="floating" label="Clave" name="clave" type="password" placeholder="*********" [(ngModel)]="usr.clave"></ion-input>
-          </ion-item>
+    <ion-item>
+      <ion-input 
+        required 
+        labelPlacement="floating" 
+        label="Nombre" 
+        name="nombre" 
+        type="text" 
+        placeholder="Pablo" 
+        [(ngModel)]="nombre">
+      </ion-input>
+    </ion-item>
 
-          <ion-item>
-            <ion-input required labelPlacement="floating" label="Nombre" name="nombre" type="text" placeholder="Pablo" [(ngModel)]="usr.nombre"></ion-input>
-          </ion-item>
+    <ion-item>
+      <ion-input 
+        required 
+        labelPlacement="floating" 
+        label="Apellido" 
+        name="apellido" 
+        type="text" 
+        placeholder="Sepulveda" 
+        [(ngModel)]="apellido">
+      </ion-input>
+    </ion-item>
 
-          <ion-item>
-            <ion-input required labelPlacement="floating" label="Apellido" name="apellido" type="text" placeholder="Sepulveda" [(ngModel)]="usr.apellido"></ion-input>
-          </ion-item>
-
-          <ion-button expand="block" fill="solid" color="secondary" type="submit" [disabled]="registroForm.invalid" class="ion-padding">
-            Registrarse
-          </ion-button>
-        </form>
-    
-    <ion-button (click)="goToLogin()"style="color:secondary;" class="footer">
-      Volver atrás
+    <ion-button expand="block" fill="solid" color="secondary" type="submit" [disabled]="registroForm.invalid" class="ion-padding">
+      Registrarse
     </ion-button>
+  </form>
 
-  </ion-content>
+  <ion-button (click)="goToLogin()" style="color:secondary;" class="footer">
+    Volver al inicio de sesión
+  </ion-button>
+</ion-content>

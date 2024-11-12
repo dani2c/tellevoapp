@@ -6,26 +6,34 @@
       <ion-title style="color: #fdb820; text-align:center;">Inicio de sesión</ion-title>
       <form #miForm="ngForm" (ngSubmit)="login()">
         <ion-item>
-          <ion-input type="text" required label="Username" labelPlacement="floating" placeholder="Nombre de usuario" name='nombre de usuario' [(ngModel)]="usr.username" ></ion-input>
+          <ion-input 
+            type="text" 
+            required 
+            label="Correo electrónico" 
+            labelPlacement="floating" 
+            placeholder="Correo" 
+            name="email" 
+            [(ngModel)]="email">
+          </ion-input>
         </ion-item>
         <ion-item>
-          <div>
-            <ion-input type="password" required label="Contraseña" labelPlacement="floating" placeholder="*******" name="clave" [(ngModel)]="usr.clave"></ion-input>
-          </div>
-          <div>
-            <ion-text (click)="goToRecuperar()">¿Olvidó su contraseña?</ion-text>
-          </div>
+          <ion-input 
+            type="password" 
+            required 
+            label="Contraseña" 
+            labelPlacement="floating" 
+            placeholder="*******" 
+            name="password" 
+            [(ngModel)]="password">
+          </ion-input>
         </ion-item>
         
         <ion-button class="botonini" type="submit" expand="block" fill="solid" style="--background: #2a9d65; color: white;" [disabled]="miForm.invalid">
           Iniciar Sesión
         </ion-button>
-        <ion-button class="botonreg"(click)="goToRegistro()"expand="block" fill="solid" color="secondary">
+        <ion-button class="botonreg" (click)="goToRegistro()" expand="block" fill="solid" color="secondary">
           Registrarse
         </ion-button>
-        <ion-text color="primary">
-          <h4>{{mensaje}}</h4>
-        </ion-text>
       </form>
     </ion-list>
   </ion-text>

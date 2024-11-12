@@ -1,7 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
-import { LocaldbService } from 'src/app/services/localdb.service';
-import { usuarioLog } from 'src/app/interfaces/usuario-log';
+import { FirebaseService } from 'src/app/services/firebase.service';
 
 declare var google: any;
 
@@ -12,86 +11,88 @@ declare var google: any;
 })
 export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
   map: any;
-  marker: any;
   destinoSeleccionado: { lat: number, lng: number } | null = null;
-  usuario: usuarioLog | null = null;
+  marcadorDestino: any = null;
+  usuarioActivoUid: string | null = null;
 
   constructor(
     private navCtrl: NavController,
     private alertController: AlertController,
-    private db: LocaldbService
+    private firebaseService: FirebaseService
   ) {}
 
-  ngAfterViewInit() {
-    this.loadMap();
+  async ngAfterViewInit() {
+    this.cargarMapa();
     this.obtenerUsuarioActivo();
   }
 
-  loadMap() {
-    const mapOptions = {
-      center: { lat: -36.826992, lng: -73.049766 },
+  cargarMapa() {
+    const centroInicial = { lat: -36.826992, lng: -73.049766 };
+
+    this.map = new google.maps.Map(document.getElementById('map'), {
+      center: centroInicial,
       zoom: 13,
-    };
-    this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    });
 
     this.map.addListener('click', (event: any) => {
-      this.agregarMarcador(event.latLng);
+      this.destinoSeleccionado = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+
+      if (this.marcadorDestino) {
+        this.marcadorDestino.setMap(null);
+      }
+
+      this.marcadorDestino = new google.maps.Marker({
+        position: this.destinoSeleccionado,
+        map: this.map,
+      });
     });
   }
 
-  agregarMarcador(position: any) {
-    if (this.marker) {
-      this.marker.setMap(null); // Eliminar marcador anterior
-    }
-
-    this.marker = new google.maps.Marker({
-      position: position,
-      map: this.map,
+  obtenerUsuarioActivo() {
+    this.firebaseService.obtenerUsuarioAutenticado().subscribe((user) => {
+      if (user) {
+        this.usuarioActivoUid = user.uid;
+      } else {
+        this.mostrarAlerta("No se pudo obtener el usuario autenticado. Intente iniciar sesión nuevamente.");
+      }
     });
-
-    this.destinoSeleccionado = {
-      lat: position.lat(),
-      lng: position.lng(),
-    };
-  }
-
-  async obtenerUsuarioActivo() {
-    // Recuperar el username del usuario activo
-    const username = await this.db.obtener('usuarioActivo');
-    if (username) {
-      // Obtener la información completa del usuario usando el username
-      this.usuario = await this.db.obtener(username);
-    }
   }
 
   async confirmarDestino() {
     if (!this.destinoSeleccionado) {
-      const alert = await this.alertController.create({
-        header: 'Error',
-        message: 'Por favor, seleccione un destino en el mapa',
-        buttons: ['OK']
-      });
-      await alert.present();
+      await this.mostrarAlerta('Por favor, seleccione un destino en el mapa.');
       return;
     }
 
-    if (this.usuario) {
-      const viaje = {
-        ...this.usuario,
-        destino: this.destinoSeleccionado
-      };
-
-      // Recuperar viajes previos y agregar el nuevo
-      const viajes = (await this.db.obtener('viajes')) || [];
-      viajes.push(viaje);
-      await this.db.guardar('viajes', viajes);
-
-      // Redirigir a la página "le-notificaremos"
-      this.navCtrl.navigateForward('/le-notificaremos');
+    if (!this.usuarioActivoUid) {
+      await this.mostrarAlerta('No se pudo obtener el usuario autenticado. Intente iniciar sesión nuevamente.');
+      return;
     }
+
+    try {
+      await this.firebaseService.agregarDestino(this.usuarioActivoUid, this.destinoSeleccionado);
+      await this.mostrarAlerta('¡Destino guardado con éxito!');
+      this.navCtrl.navigateForward('/le-notificaremos');
+    } catch (error) {
+      console.error("Error al guardar el destino:", error);
+      await this.mostrarAlerta('Error al guardar el destino. Inténtelo nuevamente.');
+    }
+  }
+
+  async mostrarAlerta(mensaje: string) {
+    const alert = await this.alertController.create({
+      header: 'Atención',
+      message: mensaje,
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 
   goToPidiendoAuto() {
     this.navCtrl.navigateForward('/pidiendo-auto');
   }
 }
+

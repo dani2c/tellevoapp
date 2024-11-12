@@ -5,12 +5,12 @@
 export const environment = {
   production: false,
   firebaseConfig : {
-    apiKey: "AIzaSyCsfztyUMpZlyCYTz5Q82bDSXT-8WNJQaA",
-    authDomain: "tellevoapp-409e0.firebaseapp.com",
-    projectId: "tellevoapp-409e0",
-    storageBucket: "tellevoapp-409e0.firebasestorage.app",
-    messagingSenderId: "431903650717",
-    appId: "1:431903650717:web:91d841b15e5ddd82bfb574"
+    apiKey: "AIzaSyBil5sPlqGxIYs6X2jOTDUCTCG3ABwea1I",
+    authDomain: "tellevoapp2-ce4bb.firebaseapp.com",
+    projectId: "tellevoapp2-ce4bb",
+    storageBucket: "tellevoapp2-ce4bb.firebasestorage.app",
+    messagingSenderId: "109444270390",
+    appId: "1:109444270390:web:d7b2f0b9e1d5b85e7f8b97"
   }
 };
 

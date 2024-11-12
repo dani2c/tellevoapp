@@ -1,26 +1,18 @@
 <app-encabezado></app-encabezado>
 <ion-content class="fondo">
-  <!-- Mapa donde se mostrarán los destinos de los choferes -->
-  <div id="map" style="height: 300px; width: 100%;"></div>
+  <div id="map" style="height: 400px;"></div>
 
   <ion-list>
-    <ion-item *ngFor="let viaje of viajesDisponibles">
+    <ion-item *ngFor="let destino of destinos$ | async">
       <ion-label>
-        <h2>Chofer: {{ viaje.nombre }} {{ viaje.apellido }}</h2>
-        <p>Destino:  {{ viaje.direccion }}</p>
+        <h2>Usuario: {{ destino.uid }}</h2>
+        <p>Destino: Latitud {{ destino.destino.lat }}, Longitud {{ destino.destino.lng }}</p>
       </ion-label>
-      <!-- Botón de eliminar, visible solo para el chofer que creó el viaje -->
-      <ion-button
-        *ngIf="usuarioActivo && viaje.username === usuarioActivo.username"
-        fill="clear"
-        color="danger"
-        (click)="eliminarViaje(viaje)"
-      >
-        <ion-icon name="trash"></ion-icon>
-      </ion-button>
     </ion-item>
   </ion-list>
 
-  <ion-button (click)="goToProgramarViajeConAuto()" style="color:white;" class="footer">Volver atrás</ion-button>
+  <ion-button expand="block" color="primary" (click)="goToProgramarViajeConAuto()">
+    Programar un nuevo viaje
+  </ion-button>
 </ion-content>
 
