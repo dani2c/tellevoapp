@@ -1,13 +1,18 @@
-<app-encabezado></app-encabezado>
-<ion-content class="fondo">
+<ion-content>
   <div id="map" style="height: 400px;"></div>
 
   <ion-list>
     <ion-item *ngFor="let destino of destinos$ | async">
       <ion-label>
-        <h2>Usuario: {{ destino.uid }}</h2>
-        <p>Destino: Latitud {{ destino.destino.lat }}, Longitud {{ destino.destino.lng }}</p>
+        <h2>Usuario: {{ destino.nombre }} {{ destino.apellido }}</h2>
+        <p>Destino: {{ destino.direccion || 'Cargando dirección...' }}</p>
       </ion-label>
+      
+      <ion-button *ngIf="destino.uid === usuarioActivo?.uid" 
+                  color="danger" 
+                  (click)="eliminarDestino(destino.id)">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 
@@ -15,4 +20,8 @@
     Programar un nuevo viaje
   </ion-button>
 </ion-content>
+
+
+
+
 

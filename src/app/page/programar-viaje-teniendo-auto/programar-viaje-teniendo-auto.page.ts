@@ -14,6 +14,8 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
   destinoSeleccionado: { lat: number, lng: number } | null = null;
   marcadorDestino: any = null;
   usuarioActivoUid: string | null = null;
+  nombre: string = '';
+  apellido: string = '';
 
   constructor(
     private navCtrl: NavController,
@@ -55,6 +57,8 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
     this.firebaseService.obtenerUsuarioAutenticado().subscribe((user) => {
       if (user) {
         this.usuarioActivoUid = user.uid;
+        this.nombre = user.displayName?.split(" ")[0] || '';
+        this.apellido = user.displayName?.split(" ")[1] || '';
       } else {
         this.mostrarAlerta("No se pudo obtener el usuario autenticado. Intente iniciar sesión nuevamente.");
       }
@@ -73,7 +77,12 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
     }
 
     try {
-      await this.firebaseService.agregarDestino(this.usuarioActivoUid, this.destinoSeleccionado);
+      await this.firebaseService.agregarDestino(
+        this.usuarioActivoUid,
+        this.destinoSeleccionado,
+        this.nombre,
+        this.apellido
+      );
       await this.mostrarAlerta('¡Destino guardado con éxito!');
       this.navCtrl.navigateForward('/le-notificaremos');
     } catch (error) {
@@ -95,4 +104,5 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
     this.navCtrl.navigateForward('/pidiendo-auto');
   }
 }
+
 
