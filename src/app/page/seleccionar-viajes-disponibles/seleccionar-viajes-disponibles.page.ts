@@ -1,7 +1,8 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 declare var google: any;
 
@@ -24,13 +25,8 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
 
   async ngAfterViewInit() {
     this.cargarMapa();
-
-    this.firebaseService.obtenerUsuarioAutenticado().subscribe(user => {
-      if (user) {
-        console.log('Usuario autenticado:', user);
-        this.usuarioActivo = user;
-      }
-    });
+    this.obtenerUsuarioActivo();
+    this.cargarDestinosConUsuarios();
   }
 
   cargarMapa() {
@@ -39,22 +35,47 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
       center: centroInicial,
       zoom: 13,
     });
+  }
 
+  cargarDestinosConUsuarios() {
     this.destinos$.subscribe(destinos => {
       destinos.forEach(destino => {
         if (destino.destino) {
+          // Obtener dirección
+          this.firebaseService.obtenerDireccion(destino.destino).then(direccion => {
+            destino.direccion = direccion;
+          });
+
+          // Si no tiene nombre y apellido, obtenerlos
+          if (!destino.nombre || !destino.apellido) {
+            this.firebaseService.obtenerUsuario(destino.uid).subscribe(usuarioData => {
+              if (usuarioData) {
+                destino.nombre = usuarioData.nombre;
+                destino.apellido = usuarioData.apellido;
+              }
+            });
+          }
+
+          // Agregar marcador al mapa
           new google.maps.Marker({
             position: destino.destino,
             map: this.map,
-            title: `Chofer: ${destino.nombre} ${destino.apellido}`,
+            title: `Chofer: ${destino.nombre || ''} ${destino.apellido || ''}`,
           });
         }
       });
     });
   }
 
+  obtenerUsuarioActivo() {
+    this.firebaseService.obtenerUsuarioAutenticado().subscribe(user => {
+      if (user) {
+        this.usuarioActivo = user;
+      }
+    });
+  }
+
   async eliminarDestino(destinoId: string) {
-    console.log(`Eliminando destino con ID: ${destinoId}`);
     await this.firebaseService.eliminarDestino(destinoId);
   }
 
@@ -62,6 +83,7 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
     this.navCtrl.navigateForward('/programar-viaje-con-auto');
   }
 }
+
 
 
 

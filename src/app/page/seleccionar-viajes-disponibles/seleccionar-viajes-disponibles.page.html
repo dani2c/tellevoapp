@@ -4,7 +4,7 @@
   <ion-list>
     <ion-item *ngFor="let destino of destinos$ | async">
       <ion-label>
-        <h2>Usuario: {{ destino.nombre }} {{ destino.apellido }}</h2>
+        <h2>Usuario: {{ destino.nombre || 'Desconocido' }} {{ destino.apellido || '' }}</h2>
         <p>Destino: {{ destino.direccion || 'Cargando dirección...' }}</p>
       </ion-label>
       
@@ -20,6 +20,7 @@
     Programar un nuevo viaje
   </ion-button>
 </ion-content>
+
 
 
 

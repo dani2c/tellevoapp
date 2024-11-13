@@ -57,6 +57,11 @@ export class FirebaseService {
     return this.auth.authState;
   }
 
+  // Nuevo método para obtener datos de usuario
+  obtenerUsuario(uid: string): Observable<any> {
+    return this.firestore.collection('usuarios').doc(uid).valueChanges();
+  }
+
   registrarUsuario(email: string, password: string, userData: any): Promise<void> {
     return this.auth.createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
@@ -88,6 +93,7 @@ export class FirebaseService {
     return this.firestore.collection('destinos').doc(id).delete();
   }
 }
+
 
 
 
