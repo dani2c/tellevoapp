@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 declare var google: any;
 
@@ -16,7 +16,7 @@ export class FirebaseService {
     private firestore: AngularFirestore,
     private auth: AngularFireAuth
   ) {
-    this.cargarDestinos(); // Cargar destinos cuando se inicia el servicio
+    this.cargarDestinos();
   }
 
   obtenerDestinos(): Observable<any[]> {
@@ -43,8 +43,8 @@ export class FirebaseService {
   obtenerDireccion(coordenadas: { lat: number, lng: number }): Promise<string> {
     return new Promise((resolve, reject) => {
       const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ location: coordenadas }, (results: any, status: any) => {
-        if (status === 'OK' && results[0]) {
+      geocoder.geocode({ location: coordenadas }, (results: google.maps.GeocoderResult[], status: google.maps.GeocoderStatus) => {
+        if (status === google.maps.GeocoderStatus.OK && results[0]) {
           resolve(results[0].formatted_address);
         } else {
           reject('No se pudo obtener la dirección');
@@ -53,22 +53,29 @@ export class FirebaseService {
     });
   }
 
+  obtenerSolicitudes(): Observable<any[]> {
+    return this.firestore.collection('solicitudes').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as any;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+
   obtenerUsuarioAutenticado(): Observable<any> {
     return this.auth.authState;
   }
 
-  // Nuevo método para obtener datos de usuario
   obtenerUsuario(uid: string): Observable<any> {
     return this.firestore.collection('usuarios').doc(uid).valueChanges();
   }
-
 
   registrarUsuario(email: string, password: string, userData: any): Promise<void> {
     return this.auth.createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         const uid = userCredential.user?.uid;
         if (uid) {
-          // Guardamos todos los datos del usuario, incluyendo el teléfono
           return this.firestore.collection('usuarios').doc(uid).set(userData);
         } else {
           throw new Error('No se pudo obtener el UID del usuario');
@@ -91,10 +98,24 @@ export class FirebaseService {
     });
   }
 
+  enviarSolicitud(destinoId: string, pasajeroId: string, nombrePasajero: string, apellidoPasajero: string, telefono: string): Promise<void> {
+    return this.firestore.collection('solicitudes').add({
+      destinoId,
+      pasajeroId,
+      nombrePasajero,
+      apellidoPasajero,
+      telefono
+    }).then(() => {}); // Resolución explícita como Promise<void>
+  }
+
   eliminarDestino(id: string): Promise<void> {
     return this.firestore.collection('destinos').doc(id).delete();
   }
+
+  
 }
+
+
 
 
 

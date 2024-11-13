@@ -88,6 +88,10 @@ const routes: Routes = [
     path: 'clavecambiada',
     loadChildren: () => import('./page/clavecambiada/clavecambiada.module').then( m => m.ClavecambiadaPageModule)
   },
+  {
+    path: 'historial',
+    loadChildren: () => import('./page/historial/historial.module').then( m => m.HistorialPageModule)
+  },
 
   
 ];
