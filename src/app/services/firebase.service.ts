@@ -62,11 +62,13 @@ export class FirebaseService {
     return this.firestore.collection('usuarios').doc(uid).valueChanges();
   }
 
+
   registrarUsuario(email: string, password: string, userData: any): Promise<void> {
     return this.auth.createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         const uid = userCredential.user?.uid;
         if (uid) {
+          // Guardamos todos los datos del usuario, incluyendo el teléfono
           return this.firestore.collection('usuarios').doc(uid).set(userData);
         } else {
           throw new Error('No se pudo obtener el UID del usuario');

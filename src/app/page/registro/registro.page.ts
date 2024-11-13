@@ -9,11 +9,11 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   styleUrls: ['./registro.page.scss'],
 })
 export class RegistroPage implements OnInit {
-
   email: string = '';
   password: string = '';
   nombre: string = '';
   apellido: string = '';
+  telefono: string = ''; // Nuevo campo para el teléfono
 
   constructor(
     private firebaseService: FirebaseService,
@@ -25,24 +25,22 @@ export class RegistroPage implements OnInit {
   ngOnInit() {}
 
   async registro() {
-    const userData = { nombre: this.nombre, apellido: this.apellido };
-    try {
-      // Llamada a Firebase para registrar el usuario
-      await this.firebaseService.registrarUsuario(this.email, this.password, userData);
+    const userData = {
+      nombre: this.nombre,
+      apellido: this.apellido,
+      telefono: this.telefono, // Agregamos el teléfono al objeto de datos del usuario
+    };
 
-      // Mostrar un mensaje de éxito
+    try {
+      await this.firebaseService.registrarUsuario(this.email, this.password, userData);
       const toast = await this.toastController.create({
         message: 'Usuario registrado exitosamente',
         duration: 2000,
         color: 'success',
       });
       await toast.present();
-
-      // Navegar a la página de inicio de sesión después de registrarse
       this.router.navigate(['/login']);
-
     } catch (error: any) {
-      // Manejo de errores: el mensaje de error se obtiene y muestra de manera segura
       const errorMessage = error?.message || 'Error desconocido al registrar usuario';
       const toast = await this.toastController.create({
         message: `Error al registrar usuario: ${errorMessage}`,

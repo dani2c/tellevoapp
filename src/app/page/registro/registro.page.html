@@ -6,59 +6,71 @@
   </ion-text>
   <form #registroForm="ngForm" (ngSubmit)="registro()">
     <ion-item>
-      <ion-input 
-        required 
-        labelPlacement="floating" 
-        label="Correo" 
-        name="email" 
-        type="email" 
-        placeholder="ejemplo@duocuc.cl" 
+      <ion-input
+        required
+        labelPlacement="floating"
+        label="Correo"
+        name="email"
+        type="email"
+        placeholder="ejemplo@duocuc.cl"
         [(ngModel)]="email">
       </ion-input>
     </ion-item>
-
+    
     <ion-item>
-      <ion-input 
-        required 
-        labelPlacement="floating" 
-        label="Clave" 
-        name="password" 
-        type="password" 
-        placeholder="*********" 
+      <ion-input
+        required
+        labelPlacement="floating"
+        label="Clave"
+        name="password"
+        type="password"
+        placeholder="*********"
         [(ngModel)]="password">
       </ion-input>
     </ion-item>
-
+    
     <ion-item>
-      <ion-input 
-        required 
-        labelPlacement="floating" 
-        label="Nombre" 
-        name="nombre" 
-        type="text" 
-        placeholder="Pablo" 
+      <ion-input
+        required
+        labelPlacement="floating"
+        label="Nombre"
+        name="nombre"
+        type="text"
+        placeholder="Pablo"
         [(ngModel)]="nombre">
       </ion-input>
     </ion-item>
-
+    
     <ion-item>
-      <ion-input 
-        required 
-        labelPlacement="floating" 
-        label="Apellido" 
-        name="apellido" 
-        type="text" 
-        placeholder="Sepulveda" 
+      <ion-input
+        required
+        labelPlacement="floating"
+        label="Apellido"
+        name="apellido"
+        type="text"
+        placeholder="Sepulveda"
         [(ngModel)]="apellido">
       </ion-input>
     </ion-item>
 
-    <ion-button expand="block" fill="solid" color="secondary" type="submit" [disabled]="registroForm.invalid" class="ion-padding">
+    <ion-item>
+      <ion-input
+        required
+        labelPlacement="floating"
+        label="Teléfono"
+        name="telefono"
+        type="tel"
+        placeholder="123456789"
+        [(ngModel)]="telefono">
+      </ion-input>
+    </ion-item>
+
+    <ion-button expand="block" fill="solid" color="secondary" type="submit" [disabled]="registroForm.invalid">
       Registrarse
     </ion-button>
   </form>
 
-  <ion-button (click)="goToLogin()" style="color:secondary;" class="footer">
-    Volver al inicio de sesión
+  <ion-button (click)="goToLogin()" class="footer">
+    Volver atrás
   </ion-button>
 </ion-content>
