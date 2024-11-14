@@ -18,5 +18,7 @@ export class HomePage {
   goToLogin(){
     this.navCtrl.navigateForward('/login')
   }
-  
+  goToHistorial(){
+    this.navCtrl.navigateForward('/historial')
+  }  
 }

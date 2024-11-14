@@ -1,3 +1,5 @@
+// programar-viaje-teniendo-auto.page.ts
+
 import { Component, AfterViewInit } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -12,20 +14,18 @@ declare var google: any;
 export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
   map: any;
   destinoSeleccionado: { lat: number, lng: number } | null = null;
+  usuarioActivo: any = null;
   marcadorDestino: any = null;
-  usuarioActivoUid: string | null = null;
-  nombre: string = '';
-  apellido: string = '';
 
   constructor(
     private navCtrl: NavController,
-    private alertController: AlertController,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private alertController: AlertController
   ) {}
 
   async ngAfterViewInit() {
     this.cargarMapa();
-    this.obtenerUsuarioActivo();
+    await this.obtenerUsuarioActivo(); // Asegura obtener el usuario activo al cargar el componente
   }
 
   cargarMapa() {
@@ -53,56 +53,71 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
     });
   }
 
-  obtenerUsuarioActivo() {
+  async obtenerUsuarioActivo() {
     this.firebaseService.obtenerUsuarioAutenticado().subscribe((user) => {
       if (user) {
-        this.usuarioActivoUid = user.uid;
-        this.nombre = user.displayName?.split(" ")[0] || '';
-        this.apellido = user.displayName?.split(" ")[1] || '';
-      } else {
-        this.mostrarAlerta("No se pudo obtener el usuario autenticado. Intente iniciar sesión nuevamente.");
+        this.firebaseService.obtenerUsuario(user.uid).subscribe((usuarioData) => {
+          if (usuarioData) {
+            this.usuarioActivo = { ...usuarioData, uid: user.uid }; // Guardar el uid y datos del usuario
+            console.log("Usuario activo obtenido:", this.usuarioActivo);
+          }
+        });
       }
     });
   }
 
   async confirmarDestino() {
     if (!this.destinoSeleccionado) {
-      await this.mostrarAlerta('Por favor, seleccione un destino en el mapa.');
+      const alert = await this.alertController.create({
+        header: 'Atención',
+        message: 'Por favor, seleccione un destino en el mapa.',
+        buttons: ['OK']
+      });
+      await alert.present();
       return;
     }
 
-    if (!this.usuarioActivoUid) {
-      await this.mostrarAlerta('No se pudo obtener el usuario autenticado. Intente iniciar sesión nuevamente.');
+    if (!this.usuarioActivo || !this.usuarioActivo.uid) { // Verificar que el UID exista
+      const alert = await this.alertController.create({
+        header: 'Atención',
+        message: 'No se pudieron obtener los datos del usuario. Intente cerrar sesión y volver a ingresar.',
+        buttons: ['OK']
+      });
+      await alert.present();
       return;
     }
+
+    const viaje = {
+      uid: this.usuarioActivo.uid,
+      nombre: this.usuarioActivo.nombre,
+      apellido: this.usuarioActivo.apellido,
+      destino: this.destinoSeleccionado
+    };
 
     try {
       await this.firebaseService.agregarDestino(
-        this.usuarioActivoUid,
+        this.usuarioActivo.uid,
         this.destinoSeleccionado,
-        this.nombre,
-        this.apellido
+        this.usuarioActivo.nombre,
+        this.usuarioActivo.apellido
       );
-      await this.mostrarAlerta('¡Destino guardado con éxito!');
-      this.navCtrl.navigateForward('/le-notificaremos');
+      const alert = await this.alertController.create({
+        header: '¡Éxito!',
+        message: '¡Viaje programado con éxito! se le notificará en la pestaña historial cuando alguien quiera unirse a su viaje',
+        buttons: ['OK']
+      });
+      await alert.present();
+      this.navCtrl.navigateForward('/home');
     } catch (error) {
       console.error("Error al guardar el destino:", error);
-      await this.mostrarAlerta('Error al guardar el destino. Inténtelo nuevamente.');
     }
-  }
-
-  async mostrarAlerta(mensaje: string) {
-    const alert = await this.alertController.create({
-      header: 'Atención',
-      message: mensaje,
-      buttons: ['OK'],
-    });
-    await alert.present();
   }
 
   goToPidiendoAuto() {
     this.navCtrl.navigateForward('/pidiendo-auto');
   }
 }
+
+
 
 

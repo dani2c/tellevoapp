@@ -24,7 +24,9 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
   ) {
     this.destinos$ = this.firebaseService.obtenerDestinos();
   }
-
+  goToPidiendoAuto(){
+    this.navCtrl.navigateForward('/pidiendo-auto')
+  } 
   async ngAfterViewInit() {
     this.cargarMapa();
     this.obtenerUsuarioActivo();
@@ -54,7 +56,7 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
   async solicitarViaje(destinoId: string, nombreChofer: string) {
     if (this.usuarioActivo && this.usuarioActivo.nombre && this.usuarioActivo.apellido && this.usuarioActivo.telefono) {
       const alert = await this.alertController.create({
-        header: `Ha sido agregado al vehículo de ${nombreChofer}`,
+        header: `Ha sido agregado al vehículo de ${nombreChofer}, el chofer lo contactará a su número de teléfono`,
         buttons: [
           {
             text: 'Aceptar',
