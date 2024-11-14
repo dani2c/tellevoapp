@@ -7,6 +7,10 @@
         <h2>Usuario: {{ destino.nombre }} {{ destino.apellido }}</h2>
         <p>Destino: {{ destino.direccion || 'Cargando dirección...' }}</p>
       </ion-label>
+
+      <ion-button *ngIf="usuarioActivo?.uid === destino.uid" color="danger" (click)="eliminarDestino(destino.id)">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
       
       <ion-button *ngIf="usuarioActivo?.uid !== destino.uid"
                   color="primary"
