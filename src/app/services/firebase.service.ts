@@ -111,9 +111,8 @@ export class FirebaseService {
   eliminarDestino(id: string): Promise<void> {
     return this.firestore.collection('destinos').doc(id).delete();
   }
-
-  
 }
+
 
 
 
