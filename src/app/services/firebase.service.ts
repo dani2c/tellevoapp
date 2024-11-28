@@ -111,7 +111,18 @@ export class FirebaseService {
   eliminarDestino(id: string): Promise<void> {
     return this.firestore.collection('destinos').doc(id).delete();
   }
+
+  // Método para cerrar sesión
+  cerrarSesion(): Promise<void> {
+    return this.auth.signOut().then(() => {
+      console.log('Cierre de sesión exitoso');
+    }).catch(error => {
+      console.error('Error al cerrar sesión:', error);
+      throw error;
+    });
+  }
 }
+
 
 
 

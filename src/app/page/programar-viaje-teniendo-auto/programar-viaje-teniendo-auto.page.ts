@@ -116,6 +116,12 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
   goToPidiendoAuto() {
     this.navCtrl.navigateForward('/pidiendo-auto');
   }
+  goToLogin(){
+    this.navCtrl.navigateForward('/login')
+  }
+  goToHistorial(){
+    this.navCtrl.navigateForward('/historial')
+  }  
 }
 
 

@@ -92,6 +92,10 @@ const routes: Routes = [
     path: 'historial',
     loadChildren: () => import('./page/historial/historial.module').then( m => m.HistorialPageModule)
   },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./page/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
 
   
 ];

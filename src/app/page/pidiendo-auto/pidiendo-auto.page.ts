@@ -18,4 +18,5 @@ export class PidiendoAutoPage {
   goToHome(){
     this.navCtrl.navigateForward('/home')
   }
+
 }

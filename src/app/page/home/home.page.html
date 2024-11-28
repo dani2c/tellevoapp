@@ -1,35 +1,7 @@
-<!--Este es el menú lateral, con su texto y todo-->
-<ion-menu side="start" menuId="first" contentId="main-content">
-    <ion-header>
-        <ion-toolbar color="primary">
-            <ion-title style="color: #fdb820; text-align:center;">Te Llevo App</ion-title>
-        </ion-toolbar>
-    </ion-header>
-
-    <ion-content>
-        <ion-list>
-            <!--<ion-item>Perfil</ion-item>-->
-            <ion-item (click)="goToHistorial()">Historial</ion-item>
-            <ion-item (click)="goToLogin()">Cerrar sesión</ion-item>
-        </ion-list>
-    </ion-content>
-</ion-menu>
+<app-encabezado></app-encabezado>
 
 
 <ion-content id="main-content" class="fondo">
-    <!--<app-encabezado></app-encabezado>-->
-    <!-- Encabezado-->
-    <ion-header>
-        <ion-toolbar color="primary">
-          <ion-buttons slot="start">
-            <!-- Botón que hace la magia (abre el menú) -->
-            <ion-menu-button autoHide="false" style="color: white;"></ion-menu-button>
-          </ion-buttons>
-            <!--<ion-title class="titulo">Inicio</ion-title>-->
-            <ion-img slot="end" src="assets/images/profile.png" class="ion-padding" style="width: 80px; height: 80px; border-radius: 50%;"></ion-img>
-            <h1 style="color: #fdb820; text-align:center;">Te Llevo App</h1>
-        </ion-toolbar>
-      </ion-header>
 
     <!--Contenido-->
     <div class="foto-auto">
@@ -38,6 +10,14 @@
         </ion-button>
     </div>
     <p style="color: black; font-size: 20px;">Programar viaje</p>
+
+    <div class="foto-auto">
+        <ion-button fill="clear" (click)="goToHistorial()">
+            <img class="borde" src="assets/images/historial.jpg" alt="Imagen del botón" />
+        </ion-button>
+    </div>
+    <p style="color: black; font-size: 20px;">Ver Historial</p>
+
     <ion-button (click)="goToContactanos()" style="color:white;" class="footer">Contáctanos!</ion-button>    
 
 </ion-content>
