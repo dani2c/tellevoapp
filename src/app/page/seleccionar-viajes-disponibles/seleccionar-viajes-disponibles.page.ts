@@ -14,7 +14,7 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
   map: any;
   destinos$: Observable<any[]>;
   usuarioActivo: any = null;
-  markers: { id: string; marker: any }[] = []; // Lista de marcadores
+  markers: { id: string; marker: any }[] = [];
 
   constructor(
     private navCtrl: NavController,
@@ -40,17 +40,14 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
 
   cargarDestinosConUsuarios() {
     this.destinos$.subscribe(destinos => {
-      // Limpiar marcadores actuales en el mapa
       this.limpiarMarcadores();
 
       destinos.forEach(destino => {
         if (destino.destino) {
-          // Obtener dirección
           this.firebaseService.obtenerDireccion(destino.destino).then(direccion => {
             destino.direccion = direccion;
           });
 
-          // Si no tiene nombre y apellido, obtenerlos
           if (!destino.nombre || !destino.apellido) {
             this.firebaseService.obtenerUsuario(destino.uid).subscribe(usuarioData => {
               if (usuarioData) {
@@ -60,13 +57,11 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
             });
           }
 
-          // Crear y agregar un marcador al mapa
           const marker = new google.maps.Marker({
             position: destino.destino,
             map: this.map,
             title: `Chofer: ${destino.nombre || ''} ${destino.apellido || ''}`,
           });
-          // Guardar el marcador en la lista con su ID
           this.markers.push({ id: destino.id, marker });
         }
       });
@@ -75,17 +70,16 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
 
   limpiarMarcadores() {
     this.markers.forEach(m => m.marker.setMap(null));
-    this.markers = []; // Vaciar la lista de marcadores
+    this.markers = [];
   }
 
   async eliminarDestino(destinoId: string) {
     await this.firebaseService.eliminarDestino(destinoId);
 
-    // Buscar y remover el marcador correspondiente del mapa
     const markerIndex = this.markers.findIndex(m => m.id === destinoId);
     if (markerIndex !== -1) {
-      this.markers[markerIndex].marker.setMap(null); // Quitar del mapa
-      this.markers.splice(markerIndex, 1); // Remover de la lista
+      this.markers[markerIndex].marker.setMap(null);
+      this.markers.splice(markerIndex, 1);
     }
   }
 
@@ -106,20 +100,22 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
     });
   }
 
-  async solicitarViaje(destinoId: string, nombreChofer: string) {
-    if (this.usuarioActivo && this.usuarioActivo.nombre && this.usuarioActivo.apellido && this.usuarioActivo.telefono) {
+  async solicitarViaje(destinoId: string, destinoUid: string, nombreChofer: string) {
+    if (this.usuarioActivo) {
       const alert = await this.alertController.create({
         header: `Ha sido agregado al vehículo de ${nombreChofer}`,
         buttons: [
           {
             text: 'Aceptar',
             handler: async () => {
+              // Enviar la solicitud incluyendo el UID del creador del destino
               await this.firebaseService.enviarSolicitud(
                 destinoId,
                 this.usuarioActivo.uid,
                 this.usuarioActivo.nombre,
                 this.usuarioActivo.apellido,
-                this.usuarioActivo.telefono
+                this.usuarioActivo.telefono,
+                destinoUid // Nuevo parámetro
               );
               this.navCtrl.navigateForward('/home');
             }
@@ -128,7 +124,7 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
       });
       await alert.present();
     } else {
-      console.log("Error: Datos del usuario incompletos:", this.usuarioActivo);
+      console.log('Error: Usuario no autenticado.');
     }
   }
 
@@ -138,13 +134,8 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
   goToPidiendoAuto() {
     this.navCtrl.navigateForward('/pidiendo-auto');
   }
-  goToLogin(){
-    this.navCtrl.navigateForward('/login')
-  }
-  goToHistorial(){
-    this.navCtrl.navigateForward('/historial')
-  }  
 }
+
 
 
 

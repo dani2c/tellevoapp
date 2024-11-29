@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { Observable } from 'rxjs';
-import { NavController } from '@ionic/angular';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-historial',
@@ -9,15 +9,32 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./historial.page.scss'],
 })
 export class HistorialPage implements OnInit {
-  solicitudes$: Observable<any[]>;
+  solicitudes$: Observable<any[]> = new Observable<any[]>();
 
-  constructor(private firebaseService: FirebaseService,
-    private navCtrl: NavController
-  ) {
-    this.solicitudes$ = this.firebaseService.obtenerSolicitudes();
+  constructor(private firebaseService: FirebaseService) {}
+
+  ngOnInit() {
+    this.cargarHistorial();
   }
-  goToHome(){
-    this.navCtrl.navigateForward('/home')
-  } 
-  ngOnInit() {}
+
+  cargarHistorial() {
+    this.firebaseService.obtenerUsuarioAutenticado().subscribe(user => {
+      if (user) {
+        console.log('Usuario activo:', user);
+        this.solicitudes$ = this.firebaseService.obtenerSolicitudesPorCreador(user.uid).pipe(
+          map(solicitudes => solicitudes.map(solicitud => ({
+            nombrePasajero: solicitud.nombrePasajero,
+            apellidoPasajero: solicitud.apellidoPasajero,
+            telefono: solicitud.telefono
+          })))
+        );
+      } else {
+        console.error('No se pudo obtener el usuario autenticado.');
+      }
+    });
+  }
 }
+
+
+
+

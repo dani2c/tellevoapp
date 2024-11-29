@@ -19,6 +19,7 @@ export class FirebaseService {
     this.cargarDestinos();
   }
 
+  // Obtener destinos
   obtenerDestinos(): Observable<any[]> {
     return this.destinosSubject.asObservable();
   }
@@ -40,6 +41,7 @@ export class FirebaseService {
     });
   }
 
+  // Obtener dirección desde coordenadas
   obtenerDireccion(coordenadas: { lat: number, lng: number }): Promise<string> {
     return new Promise((resolve, reject) => {
       const geocoder = new google.maps.Geocoder();
@@ -53,24 +55,30 @@ export class FirebaseService {
     });
   }
 
-  obtenerSolicitudes(): Observable<any[]> {
-    return this.firestore.collection('solicitudes').snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as any;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      }))
-    );
+  // Obtener solicitudes filtradas por usuario autenticado
+  obtenerSolicitudesPorUsuario(uid: string): Observable<any[]> {
+    return this.firestore.collection('solicitudes', ref => ref.where('destinoId', '==', uid))
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as any;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      );
   }
 
+  // Obtener estado de autenticación
   obtenerUsuarioAutenticado(): Observable<any> {
     return this.auth.authState;
   }
 
+  // Obtener datos del usuario por UID
   obtenerUsuario(uid: string): Observable<any> {
     return this.firestore.collection('usuarios').doc(uid).valueChanges();
   }
 
+  // Registrar usuario con email, contraseña y otros datos
   registrarUsuario(email: string, password: string, userData: any): Promise<void> {
     return this.auth.createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
@@ -83,36 +91,57 @@ export class FirebaseService {
       });
   }
 
+  // Iniciar sesión
   iniciarSesion(email: string, password: string): Promise<void> {
     return this.auth.signInWithEmailAndPassword(email, password).then(() => {
       console.log('Inicio de sesión exitoso');
     });
   }
 
+  // Agregar destino
   agregarDestino(uid: string, destino: { lat: number, lng: number }, nombre: string, apellido: string): Promise<any> {
     return this.firestore.collection('destinos').add({
-      uid,
+      uid, // Asegura que aquí se guarda el UID del usuario
       destino,
       nombre,
       apellido
+    }).then(docRef => {
+      console.log('Destino agregado con ID:', docRef.id);
+      return docRef;
     });
   }
 
-  enviarSolicitud(destinoId: string, pasajeroId: string, nombrePasajero: string, apellidoPasajero: string, telefono: string): Promise<void> {
+  // Enviar solicitud
+  enviarSolicitud(
+    destinoId: string,
+    pasajeroId: string,
+    nombrePasajero: string,
+    apellidoPasajero: string,
+    telefono: string,
+    creadorUid: string // Nuevo campo
+  ): Promise<void> {
     return this.firestore.collection('solicitudes').add({
       destinoId,
       pasajeroId,
       nombrePasajero,
       apellidoPasajero,
-      telefono
-    }).then(() => {}); // Resolución explícita como Promise<void>
+      telefono,
+      creadorUid // Guardamos el UID del creador del destino
+    }).then(() => {
+      console.log('Solicitud enviada correctamente.');
+    }).catch(error => {
+      console.error('Error al enviar la solicitud:', error);
+      throw error;
+    });
   }
+  
 
+  // Eliminar destino
   eliminarDestino(id: string): Promise<void> {
     return this.firestore.collection('destinos').doc(id).delete();
   }
 
-  // Método para cerrar sesión
+  // Cerrar sesión
   cerrarSesion(): Promise<void> {
     return this.auth.signOut().then(() => {
       console.log('Cierre de sesión exitoso');
@@ -121,7 +150,36 @@ export class FirebaseService {
       throw error;
     });
   }
+
+  obtenerSolicitudes(): Observable<any[]> {
+    return this.firestore.collection('solicitudes').snapshotChanges().pipe(
+      map(actions =>
+        actions.map(a => {
+          const data = a.payload.doc.data() as any;
+          const id = a.payload.doc.id;
+          return { id, ...data }; // Retornar todas las solicitudes
+        })
+      )
+    );
+  }
+
+  obtenerSolicitudesPorCreador(creadorUid: string): Observable<any[]> {
+    return this.firestore.collection('solicitudes', ref => ref.where('creadorUid', '==', creadorUid))
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data() as any;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        }))
+      );
+  }
 }
+
+
+
+
+
 
 
 

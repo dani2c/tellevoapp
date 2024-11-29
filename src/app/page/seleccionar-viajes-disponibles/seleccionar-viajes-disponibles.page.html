@@ -17,8 +17,8 @@
       </ion-button>
       
       <ion-button *ngIf="usuarioActivo?.uid !== destino.uid"
-                  color="primary"
-                  (click)="solicitarViaje(destino.id, destino.nombre)">
+            color="primary"
+            (click)="solicitarViaje(destino.id, destino.uid, destino.nombre)">
         Pedir
       </ion-button>
     </ion-item>
