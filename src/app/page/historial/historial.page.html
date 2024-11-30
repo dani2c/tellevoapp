@@ -1,25 +1,26 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Historial</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-encabezado [mostrarBotonVolver]="true"></app-encabezado>
 
-<ion-content>
-  <ion-list>
-    <ion-item *ngFor="let solicitud of solicitudes$ | async">
-      <ion-label>
-        <h2>Pasajero: {{ solicitud.nombrePasajero }} {{ solicitud.apellidoPasajero }}</h2>
-        <p>Teléfono: {{ solicitud.telefono }}</p>
-      </ion-label>
-    </ion-item>
-
-    <ion-item *ngIf="!(solicitudes$ | async)?.length">
-      <ion-label>
-        <h3>No hay solicitudes para mostrar.</h3>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+<ion-content class="fondo">
+  <div class="historial-container">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Historial</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <div *ngIf="!(solicitudes$ | async)?.length" class="empty-message">
+      <h3>No hay solicitudes para mostrar.</h3>
+    </div>
+    <ion-list *ngIf="(solicitudes$ | async)?.length">
+      <div *ngFor="let solicitud of solicitudes$ | async" class="solicitud-card">
+        <h2>{{ solicitud.nombrePasajero }} {{ solicitud.apellidoPasajero }}</h2>
+        <p><strong>Teléfono:</strong> {{ solicitud.telefono }}</p>
+        <p><strong>Ubicación:</strong> {{ solicitud.ubicacion || 'Sin ubicación disponible' }}</p>
+      </div>
+    </ion-list>
+  </div>
 </ion-content>
+
+
 
 
 

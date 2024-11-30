@@ -18,5 +18,8 @@ export class PidiendoAutoPage {
   goToHome(){
     this.navCtrl.navigateForward('/home')
   }
+  goToContactanos(){
+    this.navCtrl.navigateForward('/contactanos')
+  }
 
 }

@@ -1,8 +1,53 @@
-.footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%; 
+
+
+/* Contenedor principal */
+.historial-container {
+  max-width: 90%; /* Limita el ancho */
+  margin: 2rem auto; /* Centrado y espacio */
+  padding: 1rem;
+  background-color: #343a40; /* Fondo gris oscuro */
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Título */
+ion-title {
+  color: #fdb820; /* Amarillo */
+  font-size: 1.5rem;
   text-align: center;
-  padding-bottom: 0px;
+  font-weight: bold;
+}
+
+/* Mensaje de lista vacía */
+.empty-message h3 {
+  color: #f8f9fa; /* Gris claro */
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* Tarjetas de solicitud */
+.solicitud-card {
+  background-color: #495057; /* Gris medio */
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0;
+  color: #f8f9fa; /* Texto blanco */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Títulos dentro de las tarjetas */
+.solicitud-card h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Textos descriptivos */
+.solicitud-card p {
+  font-size: 0.9rem;
+  margin: 0.2rem 0;
+}
+
+.solicitud-card p strong {
+  color: #adb5bd; /* Gris claro */
 }

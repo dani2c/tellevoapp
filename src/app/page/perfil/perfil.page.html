@@ -1,13 +1,25 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>perfil</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-encabezado [mostrarBotonVolver]="true"></app-encabezado>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">perfil</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="fondo">
+  <div class="perfil-container">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Mi Perfil</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <div class="foto-container">
+      <div class="foto-wrapper">
+        <img src="assets/images/person-default.png" alt="Foto de perfil" class="foto-usuario" />
+      </div>
+    </div>
+    <div class="info-card" *ngIf="usuario">
+      <h2>{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+      <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+      <p><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+    </div>
+    <div *ngIf="!usuario" class="loading-message">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando información del perfil...</p>
+    </div>
+  </div>
 </ion-content>

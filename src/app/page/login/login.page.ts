@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
       await toast.present();
       this.router.navigate(['/home']);
     } catch (error: any) {
-      const errorMessage = error?.message || 'Error desconocido al iniciar sesión';
+      const errorMessage = this.obtenerMensajeError(error?.code);
       const toast = await this.toastController.create({
         message: `Error: ${errorMessage}`,
         duration: 2000,
@@ -42,9 +42,23 @@ export class LoginPage implements OnInit {
     }
   }
 
+  obtenerMensajeError(errorCode: string): string {
+    switch (errorCode) {
+      case 'auth/user-not-found':
+        return 'No se encontró un usuario con ese correo.';
+      case 'auth/wrong-password':
+        return 'La contraseña ingresada es incorrecta.';
+      case 'auth/invalid-email':
+        return 'El formato del correo electrónico no es válido.';
+      default:
+        return 'Algo salió mal. Por favor, verifica tus datos.';
+    }
+  }
+
   goToRegistro() {
     this.router.navigate(['/registro']);
   }
 }
+
 
 

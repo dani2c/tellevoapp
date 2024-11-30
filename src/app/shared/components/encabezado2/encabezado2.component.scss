@@ -1,3 +1,29 @@
-.logo{
-    margin-left: 100px;
+ion-toolbar {
+  position: relative; /* Para manejar el centrado del título */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Contenedor del título */
+.titulo-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 100%;
+}
+
+h1 {
+  color: #fdb820; /* Color personalizado */
+  font-family: 'Roboto', sans-serif; /* Fuente del título */
+  font-weight: bold;
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.icon-large {
+  font-size: 1.8rem; /* Tamaño uniforme para íconos */
+  color: white;
 }

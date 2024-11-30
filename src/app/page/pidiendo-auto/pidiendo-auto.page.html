@@ -1,4 +1,4 @@
-<app-encabezado></app-encabezado>
+<app-encabezado [mostrarBotonVolver]="true"></app-encabezado>
 
 <ion-content class="fondo" >
     
@@ -7,14 +7,14 @@
             <img class="borde" src="assets/images/persona-sin-auto-dos.jpg" alt="Persona sin auto" />
         </ion-button>
     </div>
-        <p style="color: black">Pedir un auto</p>   
+        <p style="color: black; font-size: 20px;">Pedir un auto</p>   
     <div class="foto-auto">
         <ion-button fill="clear" (click)="goToProgramarViajeTeniendoAuto()">
             <img class="borde" src="assets/images/persona-con-auto.jpg" alt="Persona con auto" />
         </ion-button>
     </div>
-        <p style="color: black;">Ya tengo auto</p>
-        <ion-button (click)="goToHome()" style="color:white;" class="footer" >Volver atrás</ion-button>      
+        <p style="color: black; font-size: 20px;">Ya tengo auto</p>
+        <ion-button (click)="goToContactanos()" style="color:white;" class="footer" >Contáctanos!</ion-button>      
  
         
         

@@ -93,10 +93,30 @@ export class FirebaseService {
 
   // Iniciar sesión
   iniciarSesion(email: string, password: string): Promise<void> {
-    return this.auth.signInWithEmailAndPassword(email, password).then(() => {
-      console.log('Inicio de sesión exitoso');
-    });
+    return this.auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('Inicio de sesión exitoso');
+      })
+      .catch(error => {
+        console.error('Error al iniciar sesión:', error);
+        let errorMsg = 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.';
+        switch (error.code) {
+          case 'auth/user-not-found':
+            errorMsg = 'No se encontró un usuario con ese correo.';
+            break;
+          case 'auth/wrong-password':
+            errorMsg = 'La contraseña es incorrecta.';
+            break;
+          case 'auth/invalid-email':
+            errorMsg = 'El formato del correo no es válido.';
+            break;
+          default:
+            errorMsg = 'Algo salió mal. Verifica tus credenciales e inténtalo de nuevo.';
+        }
+        throw new Error(errorMsg); // Lanza un error con el mensaje personalizado
+      });
   }
+  
 
   // Agregar destino
   agregarDestino(uid: string, destino: { lat: number, lng: number }, nombre: string, apellido: string): Promise<any> {
@@ -118,7 +138,8 @@ export class FirebaseService {
     nombrePasajero: string,
     apellidoPasajero: string,
     telefono: string,
-    creadorUid: string // Nuevo campo
+    creadorUid: string, // UID del creador del destino
+    ubicacion: string // Nuevo campo para la ubicación
   ): Promise<void> {
     return this.firestore.collection('solicitudes').add({
       destinoId,
@@ -126,9 +147,10 @@ export class FirebaseService {
       nombrePasajero,
       apellidoPasajero,
       telefono,
-      creadorUid // Guardamos el UID del creador del destino
+      creadorUid, // Guardamos el UID del creador del destino
+      ubicacion // Guardamos la ubicación
     }).then(() => {
-      console.log('Solicitud enviada correctamente.');
+      console.log('Solicitud enviada correctamente con ubicación.');
     }).catch(error => {
       console.error('Error al enviar la solicitud:', error);
       throw error;

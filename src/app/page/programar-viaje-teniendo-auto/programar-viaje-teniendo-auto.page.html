@@ -1,34 +1,30 @@
-
-
-
-<app-encabezado></app-encabezado>
+<app-encabezado [mostrarBotonVolver]="true"></app-encabezado>
 <ion-content class="fondo">
   <div id="map" style="height: 400px;"></div>
 
-<ion-content class="fondo">
-  <form>
+<ion-content class="fondo" scroll="false">
+  <div class="toolbar-container">
     <ion-toolbar class="toolbar">
       <ion-title>Elija su destino</ion-title>
     </ion-toolbar>
 
-    <!-- Mapa de Google Maps -->
-    <div id="map" style="height: 300px; width: 100%;"></div>
-
+    <!-- Botón de Confirmar viaje -->
     <ion-button 
+      class="confirmar-boton" 
+      type="button" 
+      (click)="confirmarDestino()">
+      Confirmar viaje
+    </ion-button>
+  </div>
+    <div id="map" class="map-container"></div>
+    <!--<ion-button 
       class="botoniniciarsesion" 
       expand="full" 
       type="button" 
       (click)="confirmarDestino()" 
       style="--background: #2a9d65; color: white;">
       Confirmar viaje
-    </ion-button>
-    <ion-button 
-      (click)="goToPidiendoAuto()" 
-      style="color: white;" 
-      class="footer">
-      Volver atrás
-    </ion-button>
-  </form>
+    </ion-button>-->
 </ion-content>
 
 

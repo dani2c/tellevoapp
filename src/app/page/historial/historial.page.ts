@@ -25,7 +25,8 @@ export class HistorialPage implements OnInit {
           map(solicitudes => solicitudes.map(solicitud => ({
             nombrePasajero: solicitud.nombrePasajero,
             apellidoPasajero: solicitud.apellidoPasajero,
-            telefono: solicitud.telefono
+            telefono: solicitud.telefono,
+            ubicacion: solicitud.ubicacion
           })))
         );
       } else {

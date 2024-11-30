@@ -100,7 +100,12 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
     });
   }
 
-  async solicitarViaje(destinoId: string, destinoUid: string, nombreChofer: string) {
+  async solicitarViaje(
+    destinoId: string,
+    destinoUid: string,
+    nombreChofer: string,
+    ubicacion: string // Nuevo parámetro para la ubicación
+  ) {
     if (this.usuarioActivo) {
       const alert = await this.alertController.create({
         header: `Ha sido agregado al vehículo de ${nombreChofer}`,
@@ -108,14 +113,15 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
           {
             text: 'Aceptar',
             handler: async () => {
-              // Enviar la solicitud incluyendo el UID del creador del destino
+              // Enviar la solicitud incluyendo el UID del creador del destino y la ubicación
               await this.firebaseService.enviarSolicitud(
                 destinoId,
                 this.usuarioActivo.uid,
                 this.usuarioActivo.nombre,
                 this.usuarioActivo.apellido,
                 this.usuarioActivo.telefono,
-                destinoUid // Nuevo parámetro
+                destinoUid, // UID del creador del destino
+                ubicacion // Ubicación a agregar
               );
               this.navCtrl.navigateForward('/home');
             }
@@ -127,6 +133,7 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
       console.log('Error: Usuario no autenticado.');
     }
   }
+  
 
   goToProgramarViajeConAuto() {
     this.navCtrl.navigateForward('/programar-viaje-con-auto');

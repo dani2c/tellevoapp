@@ -1,6 +1,4 @@
-
-
-<app-encabezado></app-encabezado>
+<app-encabezado [mostrarBotonVolver]="true"></app-encabezado>
 
 <ion-content class="fondo">
   <div id="map" style="height: 400px;"></div>
@@ -18,17 +16,11 @@
       
       <ion-button *ngIf="usuarioActivo?.uid !== destino.uid"
             color="primary"
-            (click)="solicitarViaje(destino.id, destino.uid, destino.nombre)">
+            (click)="solicitarViaje(destino.id, destino.uid, destino.nombre, destino.direccion)">
         Pedir
       </ion-button>
     </ion-item>
   </ion-list>
-  <ion-button 
-    (click)="goToPidiendoAuto()" 
-    style="color: white;" 
-    class="footer">
-    Volver atrás
-  </ion-button>
 </ion-content>
 
 

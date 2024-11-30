@@ -1,17 +1,22 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <!-- Botón de cerrar sesión -->
+    <!-- Botón de volver atrás -->
     <ion-buttons slot="start">
-      <ion-button (click)="cerrarSesion()">
+      <ion-button *ngIf="mostrarBotonVolver" (click)="volverAtras()">
         <ion-icon 
-          name="log-out-outline" 
+          name="arrow-back-outline" 
           class="icon-large" 
           style="color: white;">
         </ion-icon>
       </ion-button>
     </ion-buttons>
 
-    <!-- Botón de perfil -->
+    <!-- Título centrado -->
+    <div class="titulo-container">
+      <h1>Te Llevo App</h1>
+    </div>
+
+    <!-- Botones de perfil y cerrar sesión -->
     <ion-buttons slot="end">
       <ion-button (click)="goToPerfil()">
         <ion-icon 
@@ -20,10 +25,14 @@
           style="color: white;">
         </ion-icon>
       </ion-button>
+      <ion-button (click)="cerrarSesion()">
+        <ion-icon 
+          name="log-out-outline" 
+          class="icon-large" 
+          style="color: white;">
+        </ion-icon>
+      </ion-button>
     </ion-buttons>
-
-    <!-- Título de la aplicación -->
-    <h1 style="color: #fdb820; text-align:center;">Te Llevo App</h1>
   </ion-toolbar>
 </ion-header>
 

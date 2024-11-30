@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NavController } from '@ionic/angular';
-import { FirebaseService } from 'src/app/services/firebase.service';
 
 @Component({
   selector: 'app-encabezado',
@@ -8,22 +7,21 @@ import { FirebaseService } from 'src/app/services/firebase.service';
   styleUrls: ['./encabezado.component.scss'],
 })
 export class EncabezadoComponent {
-  constructor(private navCtrl: NavController, private firebaseService: FirebaseService) {}
+  @Input() mostrarBotonVolver: boolean = false; // Controla si se muestra el botón de "Volver atrás"
 
-  async cerrarSesion() {
-    console.log('Intentando cerrar sesión...');
-    try {
-      await this.firebaseService.cerrarSesion();
-      console.log('Sesión cerrada correctamente.');
-      this.navCtrl.navigateRoot('/login'); // Redirigir a la página de inicio de sesión
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
+  constructor(private navCtrl: NavController) {}
+
+  volverAtras() {
+    this.navCtrl.back(); // Navega hacia la ventana anterior
   }
 
   goToPerfil() {
-    console.log('Navegando al perfil...');
-    this.navCtrl.navigateForward('/perfil'); // Navegar a la página de perfil
+    this.navCtrl.navigateForward('/perfil'); // Redirige al perfil del usuario
+  }
+
+  cerrarSesion() {
+    // Aquí puedes agregar lógica adicional para cerrar sesión si es necesario
+    console.log('Sesión cerrada');
+    this.navCtrl.navigateRoot('/login'); // Redirige al login tras cerrar sesión
   }
 }
-

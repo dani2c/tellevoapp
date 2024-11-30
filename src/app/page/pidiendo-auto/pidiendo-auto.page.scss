@@ -16,11 +16,13 @@
   }
   .footer {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%; 
+    bottom: 20px; /* Espacio desde la parte inferior */
+    left: 50%; /* Centrado horizontal */
+    transform: translateX(-50%); /* Asegura que esté centrado */
+    width: auto; /* Ajusta el ancho al contenido del botón */
     text-align: center;
-    padding-bottom: 0px;
+    padding: 10px 20px; /* Espaciado interno del botón */
+    border-radius: 10px; /* Bordes redondeados */
   }
   
   .texto-destacado{

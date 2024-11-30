@@ -1,8 +1,17 @@
 <ion-header>
   <ion-toolbar color="primary">
-
-    <ion-img src="assets/images/logo.png" class="logo" style="width: 120px; height: 60px; margin: 0 auto; border-radius: 50%;"></ion-img>
-    
+    <ion-buttons slot="start">
+      <ion-button *ngIf="mostrarBotonVolver" (click)="volverAtras()">
+        <ion-icon 
+          name="arrow-back-outline" 
+          class="icon-large" 
+          style="color: white;">
+        </ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <!-- Título de la aplicación -->
+    <div class="titulo-container">
+      <h1>Te Llevo App</h1>
+    </div>
   </ion-toolbar>
 </ion-header>
-
