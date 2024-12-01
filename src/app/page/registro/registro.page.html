@@ -2,72 +2,74 @@
 
 <ion-content class="fondo">
   <ion-text color="secondary" class="ion-text-center">
-    <h1>Registro</h1>
+    <ion-list color="primary" class="lista">
+      <ion-title style="color: #fdb820; text-align:center;">Registro</ion-title>
+      <form #registroForm="ngForm" (ngSubmit)="registro()">
+        <ion-item>
+          <ion-input
+            required
+            label="Correo"
+            labelPlacement="floating"
+            placeholder="ejemplo@duocuc.cl"
+            name="email"
+            type="email"
+            [(ngModel)]="email">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            required
+            label="Clave"
+            labelPlacement="floating"
+            placeholder="*********"
+            name="password"
+            type="password"
+            [(ngModel)]="password">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            required
+            label="Nombre"
+            labelPlacement="floating"
+            placeholder="Pablo"
+            name="nombre"
+            type="text"
+            [(ngModel)]="nombre">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            required
+            label="Apellido"
+            labelPlacement="floating"
+            placeholder="Sepulveda"
+            name="apellido"
+            type="text"
+            [(ngModel)]="apellido">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input
+            required
+            label="Teléfono"
+            labelPlacement="floating"
+            placeholder="123456789"
+            name="telefono"
+            type="tel"
+            [(ngModel)]="telefono">
+          </ion-input>
+        </ion-item>
+
+        <ion-button class="botonreg" expand="block" fill="solid" style="--background: #2a9d65; color: white;" type="submit" [disabled]="registroForm.invalid">
+          Registrarse
+        </ion-button>
+      </form>
+    </ion-list>
   </ion-text>
-  <form #registroForm="ngForm" (ngSubmit)="registro()">
-    <ion-item>
-      <ion-input
-        required
-        labelPlacement="floating"
-        label="Correo"
-        name="email"
-        type="email"
-        placeholder="ejemplo@duocuc.cl"
-        [(ngModel)]="email">
-      </ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-input
-        required
-        labelPlacement="floating"
-        label="Clave"
-        name="password"
-        type="password"
-        placeholder="*********"
-        [(ngModel)]="password">
-      </ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-input
-        required
-        labelPlacement="floating"
-        label="Nombre"
-        name="nombre"
-        type="text"
-        placeholder="Pablo"
-        [(ngModel)]="nombre">
-      </ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-input
-        required
-        labelPlacement="floating"
-        label="Apellido"
-        name="apellido"
-        type="text"
-        placeholder="Sepulveda"
-        [(ngModel)]="apellido">
-      </ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-input
-        required
-        labelPlacement="floating"
-        label="Teléfono"
-        name="telefono"
-        type="tel"
-        placeholder="123456789"
-        [(ngModel)]="telefono">
-      </ion-input>
-    </ion-item>
-
-    <ion-button expand="block" fill="solid" color="secondary" type="submit" [disabled]="registroForm.invalid">
-      Registrarse
-    </ion-button>
-  </form>
-
 </ion-content>
+
