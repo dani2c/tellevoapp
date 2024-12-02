@@ -1,0 +1,30 @@
+<app-encabezado [mostrarBotonVolver]="true"></app-encabezado>
+
+<ion-content class="fondo">
+  <div class="viaje-retorno-container">
+    <ion-list>
+      <ion-item *ngFor="let viaje of viajesRetorno$ | async">
+        <ion-label>
+          <h2>Chofer: {{ viaje.nombre || 'Sin nombre' }} {{ viaje.apellido || '' }}</h2>
+          <p>Teléfono: {{ viaje.telefono || 'Sin teléfono disponible' }}</p>
+          <p>Ubicación: {{ viaje.ubicacion || 'Sin ubicación disponible' }}</p>
+          <p>Costo por persona: ${{ viaje.costoFijo }}</p>
+          <p>Capacidad: {{ viaje.pasajeros }}/{{ viaje.capacidad }}</p>
+        </ion-label>
+      
+        <ion-button 
+          slot="end" 
+          color="danger" 
+          (click)="cancelarPedido(viaje.id, viaje.destinoId)">
+          Cancelar pedido
+        </ion-button>
+      </ion-item>
+
+      <ion-item *ngIf="!(viajesRetorno$ | async)?.length">
+        <ion-label>
+          <h3>No hay viajes de retorno disponibles.</h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

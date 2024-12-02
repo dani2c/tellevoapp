@@ -1,30 +1,43 @@
 <app-encabezado [mostrarBotonVolver]="true"></app-encabezado>
-<ion-content class="fondo">
-  <div id="map" style="height: 400px;"></div>
-
 <ion-content class="fondo" scroll="false">
   <div class="toolbar-container">
     <ion-toolbar class="toolbar">
       <ion-title>Elija su destino</ion-title>
     </ion-toolbar>
 
-    <!-- Botón de Confirmar viaje -->
+    <!-- Campos adicionales -->
+    <ion-item class="input-item">
+      <ion-label position="floating">Costo fijo por persona</ion-label>
+      <ion-input 
+        type="number" 
+        [(ngModel)]="costoFijo" 
+        name="costoFijo" 
+        required>
+      </ion-input>
+    </ion-item>
+
+    <ion-item class="input-item">
+      <ion-label position="floating">Capacidad del vehículo</ion-label>
+      <ion-input 
+        type="number" 
+        [(ngModel)]="capacidad" 
+        name="capacidad" 
+        required>
+      </ion-input>
+    </ion-item>
+
+    <!-- Botón Confirmar viaje -->
     <ion-button 
       class="confirmar-boton" 
       type="button" 
+      [disabled]="!costoFijo || !capacidad" 
       (click)="confirmarDestino()">
       Confirmar viaje
     </ion-button>
   </div>
-    <div id="map" class="map-container"></div>
-    <!--<ion-button 
-      class="botoniniciarsesion" 
-      expand="full" 
-      type="button" 
-      (click)="confirmarDestino()" 
-      style="--background: #2a9d65; color: white;">
-      Confirmar viaje
-    </ion-button>-->
+
+  <!-- Mapa -->
+  <div id="map" class="map-container"></div>
 </ion-content>
 
 

@@ -1,11 +1,41 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+import { map, mergeMap, switchMap } from 'rxjs/operators';
 
 declare var google: any;
 
+// Interfaces definidas al inicio del archivo
+interface DestinoData {
+  capacidad: number;
+  pasajeros: number;
+  costoFijo: number;
+  nombre: string;
+  apellido: string;
+  telefono: string;
+  destino: { lat: number; lng: number };
+}
+
+interface SolicitudData {
+  destinoId: string;
+  pasajeroId: string;
+  nombrePasajero: string;
+  apellidoPasajero: string;
+  telefono: string;
+  creadorUid: string;
+  ubicacion: string;
+}
+
+interface Destino {
+  uid: string;
+  destino: { lat: number; lng: number };
+  nombre: string;
+  apellido: string;
+  costoFijo: number;
+  capacidad: number;
+  pasajeros: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -132,30 +162,38 @@ export class FirebaseService {
   }
 
   // Enviar solicitud
-  enviarSolicitud(
+  async enviarSolicitud(
     destinoId: string,
     pasajeroId: string,
     nombrePasajero: string,
     apellidoPasajero: string,
     telefono: string,
-    creadorUid: string, // UID del creador del destino
-    ubicacion: string // Nuevo campo para la ubicación
+    creadorUid: string,
+    ubicacion: string
   ): Promise<void> {
-    return this.firestore.collection('solicitudes').add({
-      destinoId,
-      pasajeroId,
-      nombrePasajero,
-      apellidoPasajero,
-      telefono,
-      creadorUid, // Guardamos el UID del creador del destino
-      ubicacion // Guardamos la ubicación
-    }).then(() => {
-      console.log('Solicitud enviada correctamente con ubicación.');
-    }).catch(error => {
+    try {
+      await this.firestore.collection('solicitudes').add({
+        destinoId,
+        pasajeroId,
+        nombrePasajero,
+        apellidoPasajero,
+        telefono,
+        creadorUid,
+        ubicacion
+      });
+  
+      // Incrementar pasajeros en destino
+      await this.actualizarPasajeros(destinoId, 1);
+  
+      console.log('Solicitud enviada correctamente con actualización de pasajeros.');
+    } catch (error) {
       console.error('Error al enviar la solicitud:', error);
       throw error;
-    });
+    }
   }
+  
+  
+  
   
 
   // Eliminar destino
@@ -196,6 +234,149 @@ export class FirebaseService {
         }))
       );
   }
+
+  agregarDestinoConCosto(
+    uid: string,
+    destino: { lat: number; lng: number },
+    nombre: string,
+    apellido: string,
+    costoFijo: number,
+    capacidad: number
+  ): Promise<void> {
+    return this.firestore.collection('destinos').add({
+      uid,
+      destino,
+      nombre,
+      apellido,
+      costoFijo,
+      capacidad,
+      pasajeros: 0 // Inicializar la propiedad pasajeros
+    }).then(() => {
+      console.log('Destino con costo y capacidad agregado exitosamente.');
+    }).catch((error) => {
+      console.error('Error al agregar destino:', error);
+      throw error;
+    });
+  }
+
+  // Obtener viajes de retorno
+  // Modificar obtenerViajesRetorno para incluir más datos relacionados
+obtenerViajesRetorno(uid: string): Observable<any[]> {
+  return this.firestore.collection('solicitudes', ref => ref.where('pasajeroId', '==', uid))
+    .snapshotChanges()
+    .pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as any;
+        const id = a.payload.doc.id;
+
+        // Depuración: Verificar los datos que se obtienen
+        console.log('Solicitud obtenida:', data);
+
+        // Retornar los datos completos del viaje
+        return { id, ...data };
+      }))
+    );
+}
+
+  // Actualizar capacidad del viaje
+  async actualizarCapacidad(viajeId: string, nuevaCapacidad: number): Promise<void> {
+    return this.firestore.collection('solicitudes').doc(viajeId).update({ capacidad: nuevaCapacidad });
+  }
+
+  obtenerViajesRetornoConDetalles(uid: string): Observable<any[]> {
+    return this.firestore.collection('solicitudes', ref => ref.where('pasajeroId', '==', uid))
+      .snapshotChanges()
+      .pipe(
+        mergeMap(actions =>
+          Promise.all(
+            actions.map(async a => {
+              const solicitud = a.payload.doc.data() as SolicitudData; // Datos de la solicitud
+              const id = a.payload.doc.id;
+  
+              // Obtener datos del destino relacionado con la solicitud
+              const destinoDoc = await this.firestore.collection('destinos').doc(solicitud.destinoId).ref.get();
+              const destinoData = destinoDoc.exists ? (destinoDoc.data() as DestinoData) : null;
+  
+              if (!destinoData) {
+                console.warn('Destino no encontrado para solicitud:', solicitud.destinoId);
+                return null; // Ignorar solicitudes sin destino válido
+              }
+  
+              // Calcular capacidad restante y obtener pasajeros actuales
+              const capacidadRestante = destinoData.capacidad - (destinoData.pasajeros || 0);
+              const pasajeros = destinoData.pasajeros || 0;
+  
+              // Retornar una combinación de datos de solicitud y destino
+              return {
+                id, // ID de la solicitud
+                ...solicitud, // Datos de la solicitud (nombre del pasajero, etc.)
+                ...destinoData, // Datos del destino (capacidad, costoFijo, etc.)
+                capacidadRestante, // Capacidad restante calculada
+                pasajeros // Número de pasajeros actuales
+              };
+            })
+          )
+        ),
+        map(viajes => viajes.filter(viaje => viaje !== null)) // Filtrar viajes no válidos
+      );
+  }
+  
+  
+  
+  
+  
+
+  
+  async cancelarPedidoEnFirebase(viajeId: string): Promise<void> {
+    try {
+      await this.firestore.collection('solicitudes').doc(viajeId).delete();
+      console.log(`Pedido con ID ${viajeId} eliminado correctamente.`);
+    } catch (error) {
+      console.error(`Error al eliminar el pedido con ID ${viajeId}:`, error);
+      throw error;
+    }
+  }
+
+  async actualizarPasajeros(destinoId: string, incremento: number): Promise<void> {
+    const destinoDoc = await this.firestore.collection('destinos').doc(destinoId).ref.get();
+    const destinoData = destinoDoc.exists ? (destinoDoc.data() as Destino) : null;
+  
+    if (!destinoData) {
+      throw new Error('Destino no encontrado');
+    }
+  
+    const pasajerosActuales = destinoData.pasajeros || 0; // Usar 0 si pasajeros no está definido
+    const nuevosPasajeros = pasajerosActuales + incremento;
+  
+    if (nuevosPasajeros < 0) {
+      throw new Error('El número de pasajeros no puede ser negativo');
+    }
+  
+    await this.firestore.collection('destinos').doc(destinoId).update({
+      pasajeros: nuevosPasajeros
+    });
+  }
+  
+  
+  
+
+  async cancelarPedido(viajeId: string, destinoId: string): Promise<void> {
+    try {
+      // Eliminar la solicitud
+      await this.firestore.collection('solicitudes').doc(viajeId).delete();
+  
+      // Reducir pasajeros en destino
+      await this.actualizarPasajeros(destinoId, -1);
+  
+      console.log('Pedido cancelado y pasajeros actualizados.');
+    } catch (error) {
+      console.error('Error al cancelar el pedido:', error);
+      throw error;
+    }
+  }
+  
+
+
 }
 
 

@@ -72,7 +72,8 @@ const routes: Routes = [
   {
     path: 'registro',
     loadChildren: () => import('./page/registro/registro.module').then( m => m.RegistroPageModule)
-  },  {
+  },
+  {
     path: 'registrado',
     loadChildren: () => import('./page/registrado/registrado.module').then( m => m.RegistradoPageModule)
   },
@@ -95,6 +96,10 @@ const routes: Routes = [
   {
     path: 'perfil',
     loadChildren: () => import('./page/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+  {
+    path: 'viaje-retorno',
+    loadChildren: () => import('./page/viaje-retorno/viaje-retorno.module').then( m => m.ViajeRetornoPageModule)
   },
 
   

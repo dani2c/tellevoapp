@@ -21,4 +21,7 @@ export class HomePage {
   goToHistorial(){
     this.navCtrl.navigateForward('/historial')
   }  
+  goToViajeretorno(){
+    this.navCtrl.navigateForward('/viaje-retorno')
+  }  
 }

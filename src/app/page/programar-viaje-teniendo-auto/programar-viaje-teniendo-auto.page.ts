@@ -1,5 +1,3 @@
-// programar-viaje-teniendo-auto.page.ts
-
 import { Component, AfterViewInit } from '@angular/core';
 import { NavController, AlertController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
@@ -16,6 +14,9 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
   destinoSeleccionado: { lat: number, lng: number } | null = null;
   usuarioActivo: any = null;
   marcadorDestino: any = null;
+  costoFijo: number | null = null; // Nuevo campo
+  capacidad: number | null = null; // Nuevo campo
+
 
   constructor(
     private navCtrl: NavController,
@@ -25,7 +26,7 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
 
   async ngAfterViewInit() {
     this.cargarMapa();
-    await this.obtenerUsuarioActivo(); // Asegura obtener el usuario activo al cargar el componente
+    await this.obtenerUsuarioActivo();
   }
 
   cargarMapa() {
@@ -58,7 +59,7 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
       if (user) {
         this.firebaseService.obtenerUsuario(user.uid).subscribe((usuarioData) => {
           if (usuarioData) {
-            this.usuarioActivo = { ...usuarioData, uid: user.uid }; // Guardar el uid y datos del usuario
+            this.usuarioActivo = { ...usuarioData, uid: user.uid }; 
             console.log("Usuario activo obtenido:", this.usuarioActivo);
           }
         });
@@ -77,7 +78,17 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
       return;
     }
 
-    if (!this.usuarioActivo || !this.usuarioActivo.uid) { // Verificar que el UID exista
+    if (!this.costoFijo || !this.capacidad) {
+      const alert = await this.alertController.create({
+        header: 'Atención',
+        message: 'Debe ingresar un costo fijo y la capacidad del vehículo.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
+
+    if (!this.usuarioActivo || !this.usuarioActivo.uid) { 
       const alert = await this.alertController.create({
         header: 'Atención',
         message: 'No se pudieron obtener los datos del usuario. Intente cerrar sesión y volver a ingresar.',
@@ -86,6 +97,8 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
       await alert.present();
       return;
     }
+    console.log('Capacidad ingresada:', this.capacidad);
+    console.log('Costo por persona ingresado:', this.costoFijo);
 
     const viaje = {
       uid: this.usuarioActivo.uid,
@@ -95,11 +108,13 @@ export class ProgramarViajeTeniendoAutoPage implements AfterViewInit {
     };
 
     try {
-      await this.firebaseService.agregarDestino(
+      await this.firebaseService.agregarDestinoConCosto(
         this.usuarioActivo.uid,
         this.destinoSeleccionado,
         this.usuarioActivo.nombre,
-        this.usuarioActivo.apellido
+        this.usuarioActivo.apellido,
+        this.costoFijo,
+        this.capacidad
       );
       const alert = await this.alertController.create({
         header: '¡Éxito!',
