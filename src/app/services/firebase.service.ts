@@ -49,6 +49,52 @@ export class FirebaseService {
     this.cargarDestinos();
   }
 
+  // Sincronizar historial al local storage
+  async sincronizarHistorialLocal(uid: string): Promise<any[]> {
+    try {
+      const snapshot = await this.firestore
+        .collection('solicitudes', (ref) => ref.where('creadorUid', '==', uid))
+        .get()
+        .toPromise();
+  
+      if (!snapshot || snapshot.empty) {
+        console.log('No se encontraron solicitudes para este usuario.');
+        return []; // Retorna un array vacío si no hay datos
+      }
+  
+      const historial = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        if (typeof data !== 'object' || data === null) {
+          console.warn(`Datos inesperados para el documento ${doc.id}:`, data);
+          return null; // Ignora datos que no sean objetos
+        }
+  
+        return {
+          id: doc.id,
+          ...data,
+        };
+      }).filter((item) => item !== null); // Filtra los valores nulos
+  
+      // Almacenar en localStorage
+      localStorage.setItem('historial', JSON.stringify(historial));
+      console.log('Historial sincronizado localmente:', historial);
+  
+      return historial;
+    } catch (error) {
+      console.error('Error al sincronizar historial local:', error);
+      return [];
+    }
+  }
+  
+  
+
+  // Sincronizar viajes de retorno al local storage
+  sincronizarViajesRetornoLocal(uid: string) {
+    this.obtenerViajesRetornoConDetalles(uid).subscribe((viajesRetorno) => {
+      localStorage.setItem('viajesRetorno', JSON.stringify(viajesRetorno));
+    });
+  }
+
   // Obtener destinos
   obtenerDestinos(): Observable<any[]> {
     return this.destinosSubject.asObservable();
@@ -122,12 +168,13 @@ export class FirebaseService {
   }
 
   // Iniciar sesión
-  iniciarSesion(email: string, password: string): Promise<void> {
+  iniciarSesion(email: string, password: string): Promise<firebase.default.auth.UserCredential> {
     return this.auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('Inicio de sesión exitoso');
+      .then((userCredential) => {
+        console.log('Inicio de sesión exitoso:', userCredential);
+        return userCredential; // Devolvemos el objeto completo
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error al iniciar sesión:', error);
         let errorMsg = 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo.';
         switch (error.code) {
