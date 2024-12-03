@@ -91,6 +91,9 @@ export class LoginPage implements OnInit {
   goToRegistro() {
     this.router.navigate(['/registro']);
   }
+  goToRecuperar() {
+    this.router.navigate(['/recuperar']);
+  }
 }
 
 

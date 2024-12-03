@@ -1,25 +1,25 @@
-<app-encabezado2></app-encabezado2>
+<app-encabezado [mostrarBotonVolver]="true"></app-encabezado>
 
 <ion-content class="fondo">
-  <ion-text class="ion-text-center">
-    <ion-list class="lista">
-      <h1>Recuperar contraseña</h1>
-      <form>
-        <ion-text>Ingrese su correo para enviar el codigo de recuperacion</ion-text>
+  <ion-text color="secondary" class="ion-text-center">
+    <ion-list color="primary" class="lista">
+      <ion-title style="color: #fdb820; text-align:center;">Recuperar Contraseña</ion-title>
+      <form #recuperarForm="ngForm" (ngSubmit)="enviarRecuperacion()">
         <ion-item>
-          <ion-input type="text" required label="Correo" labelPlacement="floating" placeholder="correo" name='correo'></ion-input>
-        </ion-item> 
-        <!--<ion-item>
-          <ion-input type="text" required label="Codigo" labelPlacement="floating" placeholder="Ingrese codigo" name='codigo'></ion-input>
-        </ion-item>-->          
-        <ion-button (click)="goToCodigoclave()" class="botonacep"type="submit" expand="block" fill="solid" color="secondary">
-          Aceptar
+          <ion-input 
+            type="email" 
+            required 
+            label="Correo electrónico" 
+            labelPlacement="floating" 
+            placeholder="Correo" 
+            name="email" 
+            [(ngModel)]="email">
+          </ion-input>
+        </ion-item>
+        <ion-button class="botonini" type="submit" expand="block" fill="solid" style="--background: #2a9d65; color: white;" [disabled]="recuperarForm.invalid">
+          Enviar
         </ion-button>
-        <!--<ion-button expand="block" fill="solid" color="primary">
-          Volver a enviar código
-        </ion-button>-->
       </form>
     </ion-list>
-    <ion-button (click)="goToRegistro()"  class="footer">Volver</ion-button> 
   </ion-text>
 </ion-content>

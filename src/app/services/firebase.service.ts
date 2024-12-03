@@ -116,7 +116,16 @@ export class FirebaseService {
       this.destinosSubject.next(destinos);
     });
   }
-
+  recuperarContrasena(email: string): Promise<void> {
+    return this.auth.sendPasswordResetEmail(email)
+      .then(() => {
+        console.log('Correo de recuperación enviado.');
+      })
+      .catch((error) => {
+        console.error('Error al enviar el correo de recuperación:', error);
+        throw error;
+      });
+  }
   // Obtener dirección desde coordenadas
   obtenerDireccion(coordenadas: { lat: number, lng: number }): Promise<string> {
     return new Promise((resolve, reject) => {
