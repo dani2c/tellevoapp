@@ -49,6 +49,84 @@ export class FirebaseService {
     this.cargarDestinos();
   }
 
+  async sincronizarUsuarioConFirebase(usuario: any): Promise<void> {
+    try {
+      // Registrar usuario en Firebase Authentication
+      const userCredential = await this.auth.createUserWithEmailAndPassword(
+        usuario.email,
+        usuario.password
+      );
+  
+      // Obtener UID del usuario creado
+      const uid = userCredential.user?.uid;
+      if (!uid) {
+        throw new Error('No se pudo obtener el UID del usuario.');
+      }
+  
+      // Almacenar datos adicionales del usuario en Firestore
+      await this.firestore.collection('usuarios').doc(uid).set({
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        telefono: usuario.telefono,
+      });
+  
+      console.log(`Usuario ${usuario.email} sincronizado correctamente.`);
+    } catch (error) {
+      console.error(`Error al sincronizar el usuario ${usuario.email}:`, error);
+      throw error; // Lanzar el error para que sea capturado en el flujo principal
+    }
+  }
+
+  async registrarUsuario(email: string, password: string, userData: any): Promise<void> {
+    if (!navigator.onLine) {
+      console.warn('No hay conexión a Internet. Guardando usuario en local storage.');
+      this.guardarUsuarioLocalmente(email, password, userData);
+      return;
+    }
+
+    try {
+      const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
+      const uid = userCredential.user?.uid;
+      if (uid) {
+        await this.firestore.collection('usuarios').doc(uid).set(userData);
+        console.log('Usuario registrado en Firebase.');
+      } else {
+        throw new Error('No se pudo obtener el UID del usuario');
+      }
+    } catch (error) {
+      console.error('Error al registrar usuario:', error);
+      throw error;
+    }
+  }
+
+  guardarUsuarioLocalmente(email: string, password: string, userData: any): void {
+    const usuariosPendientes = JSON.parse(localStorage.getItem('usuariosPendientes') || '[]');
+    usuariosPendientes.push({ email, password, ...userData });
+    localStorage.setItem('usuariosPendientes', JSON.stringify(usuariosPendientes));
+  }
+
+  async sincronizarUsuariosPendientes(): Promise<void> {
+    const usuariosPendientes = JSON.parse(localStorage.getItem('usuariosPendientes') || '[]');
+    if (!usuariosPendientes.length) return;
+
+    for (const usuario of usuariosPendientes) {
+      try {
+        const userCredential = await this.auth.createUserWithEmailAndPassword(
+          usuario.email,
+          usuario.password
+        );
+        const uid = userCredential.user?.uid;
+        if (uid) {
+          await this.firestore.collection('usuarios').doc(uid).set(usuario);
+          console.log('Usuario sincronizado con Firebase:', usuario.email);
+        }
+      } catch (error) {
+        console.error('Error al sincronizar usuario pendiente:', usuario.email, error);
+      }
+    }
+
+    localStorage.removeItem('usuariosPendientes'); // Limpiar datos una vez sincronizados
+  }
   // Sincronizar historial al local storage
   async sincronizarHistorialLocal(uid: string): Promise<any[]> {
     try {
@@ -163,18 +241,6 @@ export class FirebaseService {
     return this.firestore.collection('usuarios').doc(uid).valueChanges();
   }
 
-  // Registrar usuario con email, contraseña y otros datos
-  registrarUsuario(email: string, password: string, userData: any): Promise<void> {
-    return this.auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        const uid = userCredential.user?.uid;
-        if (uid) {
-          return this.firestore.collection('usuarios').doc(uid).set(userData);
-        } else {
-          throw new Error('No se pudo obtener el UID del usuario');
-        }
-      });
-  }
 
   // Iniciar sesión
   iniciarSesion(email: string, password: string): Promise<firebase.default.auth.UserCredential> {
