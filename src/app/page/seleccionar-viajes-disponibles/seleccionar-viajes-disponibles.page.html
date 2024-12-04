@@ -10,18 +10,21 @@
         <p>Destino: {{ destino.direccion || 'Cargando dirección...' }}</p>
       </ion-label>
 
+      <!-- Botón para eliminar destino -->
       <ion-button *ngIf="usuarioActivo?.uid === destino.uid" color="danger" (click)="eliminarDestino(destino.id)">
         <ion-icon name="trash"></ion-icon>
       </ion-button>
-      
+
+      <!-- Botón para pedir viaje -->
       <ion-button *ngIf="usuarioActivo?.uid !== destino.uid"
-            color="primary"
-            (click)="solicitarViaje(destino.id, destino.uid, destino.nombre, destino.direccion)">
+                  color="primary"
+                  (click)="solicitarViaje(destino.id, destino.uid, destino.nombre)">
         Pedir
       </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>
+
 
 
 

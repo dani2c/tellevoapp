@@ -27,6 +27,8 @@ interface SolicitudData {
   ubicacion: string;
 }
 
+
+
 interface Destino {
   uid: string;
   destino: { lat: number; lng: number };
@@ -35,6 +37,7 @@ interface Destino {
   costoFijo: number;
   capacidad: number;
   pasajeros: number;
+  ubicacion?: string; // Hacerla opcional
 }
 @Injectable({
   providedIn: 'root'
@@ -48,6 +51,21 @@ export class FirebaseService {
   ) {
     this.cargarDestinos();
   }
+
+  async verificarCapacidad(destinoId: string): Promise<number> {
+    const destinoDoc = await this.firestore.collection('destinos').doc(destinoId).ref.get();
+    const destinoData = destinoDoc.exists ? (destinoDoc.data() as Destino) : null; // Usamos la interfaz Destino
+  
+    if (!destinoData) {
+      throw new Error('Destino no encontrado');
+    }
+  
+    const capacidad = destinoData.capacidad || 0; // Sin necesidad de usar índices
+    const pasajeros = destinoData.pasajeros || 0;
+  
+    return capacidad - pasajeros; // Retorna la capacidad restante
+  }
+  
 
   async sincronizarUsuarioConFirebase(usuario: any): Promise<void> {
     try {
@@ -291,7 +309,7 @@ export class FirebaseService {
     apellidoPasajero: string,
     telefono: string,
     creadorUid: string,
-    ubicacion: string
+    ubicacion: string // Asegurarnos de enviar todos los argumentos requeridos
   ): Promise<void> {
     try {
       await this.firestore.collection('solicitudes').add({
@@ -301,18 +319,16 @@ export class FirebaseService {
         apellidoPasajero,
         telefono,
         creadorUid,
-        ubicacion
+        ubicacion,
       });
   
-      // Incrementar pasajeros en destino
-      await this.actualizarPasajeros(destinoId, 1);
-  
-      console.log('Solicitud enviada correctamente con actualización de pasajeros.');
+      console.log('Solicitud enviada correctamente.');
     } catch (error) {
       console.error('Error al enviar la solicitud:', error);
       throw error;
     }
   }
+  
   
   
   
@@ -496,6 +512,11 @@ obtenerViajesRetorno(uid: string): Observable<any[]> {
       throw error;
     }
   }
+  async obtenerDestino(destinoId: string): Promise<Destino | null> {
+    const destinoDoc = await this.firestore.collection('destinos').doc(destinoId).ref.get();
+    return destinoDoc.exists ? (destinoDoc.data() as Destino) : null;
+  }
+  
   
 
 

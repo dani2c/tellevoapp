@@ -73,16 +73,6 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
     this.markers = [];
   }
 
-  async eliminarDestino(destinoId: string) {
-    await this.firebaseService.eliminarDestino(destinoId);
-
-    const markerIndex = this.markers.findIndex(m => m.id === destinoId);
-    if (markerIndex !== -1) {
-      this.markers[markerIndex].marker.setMap(null);
-      this.markers.splice(markerIndex, 1);
-    }
-  }
-
   obtenerUsuarioActivo() {
     this.firebaseService.obtenerUsuarioAutenticado().subscribe(user => {
       if (user) {
@@ -100,48 +90,90 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
     });
   }
 
-  async solicitarViaje(
-    destinoId: string,
-    destinoUid: string,
-    nombreChofer: string,
-    ubicacion: string // Nuevo parámetro para la ubicación
-  ) {
-    if (this.usuarioActivo) {
+  async eliminarDestino(destinoId: string) {
+    try {
+      await this.firebaseService.eliminarDestino(destinoId);
+
+      const markerIndex = this.markers.findIndex((m) => m.id === destinoId);
+      if (markerIndex !== -1) {
+        this.markers[markerIndex].marker.setMap(null);
+        this.markers.splice(markerIndex, 1);
+      }
+
       const alert = await this.alertController.create({
-        header: `Ha sido agregado al vehículo de ${nombreChofer}`,
-        buttons: [
-          {
-            text: 'Aceptar',
-            handler: async () => {
-              // Enviar la solicitud incluyendo el UID del creador del destino y la ubicación
-              await this.firebaseService.enviarSolicitud(
-                destinoId,
-                this.usuarioActivo.uid,
-                this.usuarioActivo.nombre,
-                this.usuarioActivo.apellido,
-                this.usuarioActivo.telefono,
-                destinoUid, // UID del creador del destino
-                ubicacion // Ubicación a agregar
-              );
-              this.navCtrl.navigateForward('/home');
-            }
-          }
-        ]
+        header: 'Éxito',
+        message: 'Destino eliminado correctamente.',
+        buttons: ['OK'],
       });
       await alert.present();
-    } else {
-      console.log('Error: Usuario no autenticado.');
+    } catch (error) {
+      console.error('Error al eliminar destino:', error);
     }
   }
+
+  async solicitarViaje(destinoId: string, destinoUid: string, nombreChofer: string) {
+    try {
+      // Verificar la capacidad antes de enviar la solicitud
+      const capacidadRestante = await this.firebaseService.verificarCapacidad(destinoId);
+  
+      if (capacidadRestante <= 0) {
+        const alert = await this.alertController.create({
+          header: 'Capacidad llena',
+          message: 'El vehículo ha alcanzado su capacidad máxima. No se pueden realizar más solicitudes para este destino.',
+          buttons: ['OK'],
+        });
+        await alert.present();
+        return; // Salir del método si la capacidad está llena
+      }
+  
+      // Obtener los datos del destino desde Firebase
+      const destinoDoc = await this.firebaseService.obtenerDestino(destinoId);
+      const destinoData = destinoDoc || { ubicacion: 'Ubicación no disponible' }; // Asignar valor predeterminado
+  
+      // Asegurar que `ubicacion` siempre sea un string
+      const ubicacion = destinoData.ubicacion || 'Ubicación no disponible';
+  
+      // Enviar la solicitud con todos los datos necesarios
+      await this.firebaseService.enviarSolicitud(
+        destinoId,
+        this.usuarioActivo.uid,
+        this.usuarioActivo.nombre,
+        this.usuarioActivo.apellido,
+        this.usuarioActivo.telefono,
+        destinoUid,
+        ubicacion // Ubicación garantizada como string
+      );
+  
+      const alert = await this.alertController.create({
+        header: 'Solicitud enviada',
+        message: `Te has unido al viaje con ${nombreChofer}.`,
+        buttons: ['OK'],
+      });
+      await alert.present();
+    } catch (error) {
+      console.error('Error al solicitar viaje:', error);
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'Ocurrió un error al procesar tu solicitud. Por favor, intenta nuevamente.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+    }
+  }
+  
+
+  
   
 
   goToProgramarViajeConAuto() {
     this.navCtrl.navigateForward('/programar-viaje-con-auto');
   }
+
   goToPidiendoAuto() {
     this.navCtrl.navigateForward('/pidiendo-auto');
   }
 }
+
 
 
 
