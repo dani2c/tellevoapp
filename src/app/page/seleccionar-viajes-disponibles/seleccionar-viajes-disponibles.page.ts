@@ -100,39 +100,67 @@ export class SeleccionarViajesDisponiblesPage implements AfterViewInit {
     });
   }
 
-  async solicitarViaje(
-    destinoId: string,
-    destinoUid: string,
-    nombreChofer: string,
-    ubicacion: string // Nuevo parámetro para la ubicación
-  ) {
-    if (this.usuarioActivo) {
-      const alert = await this.alertController.create({
-        header: `Ha sido agregado al vehículo de ${nombreChofer}`,
-        buttons: [
-          {
-            text: 'Aceptar',
-            handler: async () => {
-              // Enviar la solicitud incluyendo el UID del creador del destino y la ubicación
-              await this.firebaseService.enviarSolicitud(
-                destinoId,
-                this.usuarioActivo.uid,
-                this.usuarioActivo.nombre,
-                this.usuarioActivo.apellido,
-                this.usuarioActivo.telefono,
-                destinoUid, // UID del creador del destino
-                ubicacion // Ubicación a agregar
-              );
-              this.navCtrl.navigateForward('/home');
-            }
+    async solicitarViaje(
+      destinoId: string,
+      destinoUid: string,
+      nombreChofer: string,
+      ubicacion: string // Nuevo parámetro para la ubicación
+    ) {
+      if (this.usuarioActivo) {
+          // Llamada al servicio firebaseService para obtener la información del destino
+          const destinoData = await this.firebaseService.obtenerDestinoPorId(destinoId);
+
+          if (!destinoData) {
+              console.error('Destino no encontrado');
+              return;
           }
-        ]
-      });
-      await alert.present();
-    } else {
-      console.log('Error: Usuario no autenticado.');
-    }
+
+          // Verificar si el vehículo ha alcanzado su capacidad máxima
+          if (destinoData.pasajeros >= destinoData.capacidad) {
+              // Si el vehículo ya está lleno, mostrar mensaje de capacidad máxima
+              const alert = await this.alertController.create({
+                  header: `Este vehículo llegó a la capacidad máxima`,
+                  buttons: [
+                      {
+                          text: 'Aceptar',
+                          handler: () => {
+                              this.navCtrl.navigateForward('/home');
+                          }
+                      }
+                  ]
+              });
+              await alert.present();
+          } else {
+              // Si el vehículo no ha alcanzado la capacidad, mostrar el mensaje normal
+              const alert = await this.alertController.create({
+                  header: `Ha sido agregado al vehículo de ${nombreChofer}`,
+                  buttons: [
+                      {
+                          text: 'Aceptar',
+                          handler: async () => {
+                              // Enviar la solicitud incluyendo el UID del creador del destino y la ubicación
+                              await this.firebaseService.enviarSolicitud(
+                                  destinoId,
+                                  this.usuarioActivo.uid,
+                                  this.usuarioActivo.nombre,
+                                  this.usuarioActivo.apellido,
+                                  this.usuarioActivo.telefono,
+                                  destinoUid, // UID del creador del destino
+                                  ubicacion // Ubicación a agregar
+                              );
+                              this.navCtrl.navigateForward('/home');
+                          }
+                      }
+                  ]
+              });
+              await alert.present();
+          }
+      } else {
+          console.log('Error: Usuario no autenticado.');
+      }
   }
+
+
   
 
   goToProgramarViajeConAuto() {

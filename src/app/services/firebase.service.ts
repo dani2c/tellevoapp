@@ -49,6 +49,8 @@ export class FirebaseService {
     this.cargarDestinos();
   }
 
+  
+
   async sincronizarUsuarioConFirebase(usuario: any): Promise<void> {
     try {
       // Registrar usuario en Firebase Authentication
@@ -284,6 +286,7 @@ export class FirebaseService {
   }
 
   // Enviar solicitud
+  // Función para enviar la solicitud
   async enviarSolicitud(
     destinoId: string,
     pasajeroId: string,
@@ -294,6 +297,23 @@ export class FirebaseService {
     ubicacion: string
   ): Promise<void> {
     try {
+      // Obtener el destino
+      const destinoDoc = await this.firestore.collection('destinos').doc(destinoId).ref.get();
+      const destinoData = destinoDoc.exists ? destinoDoc.data() as Destino : null;
+      
+      if (!destinoData) {
+        throw new Error('Destino no encontrado');
+      }
+  
+      // Verificar si hay capacidad disponible
+      if (destinoData.pasajeros >= destinoData.capacidad) {
+        console.error('No hay asientos disponibles');
+        // Mostrar alerta de no hay asientos disponibles
+        alert('Ya no quedan asientos disponibles para este vehículo.');
+        return; // Salir de la función si no hay asientos disponibles
+      }
+  
+      // Si hay capacidad, agregar la solicitud
       await this.firestore.collection('solicitudes').add({
         destinoId,
         pasajeroId,
@@ -306,14 +326,47 @@ export class FirebaseService {
   
       // Incrementar pasajeros en destino
       await this.actualizarPasajeros(destinoId, 1);
-  
+      
       console.log('Solicitud enviada correctamente con actualización de pasajeros.');
     } catch (error) {
       console.error('Error al enviar la solicitud:', error);
       throw error;
     }
   }
-  
+
+
+  // En firebaseService
+
+  async obtenerDestinoPorId(destinoId: string): Promise<any> {
+    try {
+        const destinoDoc = await this.firestore.collection('destinos').doc(destinoId).ref.get();
+        return destinoDoc.exists ? destinoDoc.data() : null;
+    } catch (error) {
+        console.error('Error al obtener destino:', error);
+        return null;
+    }
+  }
+
+  // Función para actualizar la cantidad de pasajeros en el destino
+  async actualizarPasajeros(destinoId: string, cantidad: number): Promise<void> {
+    try {
+      // Obtener el destino y asegurarse de que sea de tipo 'Destino'
+      const destinoDoc = await this.firestore.collection('destinos').doc(destinoId).ref.get();
+      const destinoData = destinoDoc.exists ? destinoDoc.data() as Destino : null;
+
+      if (destinoData) {
+        // Si destinoData es válido, actualiza los pasajeros
+        const nuevosPasajeros = destinoData.pasajeros + cantidad;
+        await this.firestore.collection('destinos').doc(destinoId).update({ pasajeros: nuevosPasajeros });
+      } else {
+        console.error('Destino no encontrado.');
+      }
+    } catch (error) {
+      console.error('Error al actualizar los pasajeros:', error);
+      throw error;
+    }
+  }
+
   
   
   
@@ -459,25 +512,6 @@ obtenerViajesRetorno(uid: string): Observable<any[]> {
     }
   }
 
-  async actualizarPasajeros(destinoId: string, incremento: number): Promise<void> {
-    const destinoDoc = await this.firestore.collection('destinos').doc(destinoId).ref.get();
-    const destinoData = destinoDoc.exists ? (destinoDoc.data() as Destino) : null;
-  
-    if (!destinoData) {
-      throw new Error('Destino no encontrado');
-    }
-  
-    const pasajerosActuales = destinoData.pasajeros || 0; // Usar 0 si pasajeros no está definido
-    const nuevosPasajeros = pasajerosActuales + incremento;
-  
-    if (nuevosPasajeros < 0) {
-      throw new Error('El número de pasajeros no puede ser negativo');
-    }
-  
-    await this.firestore.collection('destinos').doc(destinoId).update({
-      pasajeros: nuevosPasajeros
-    });
-  }
   
   
   
